@@ -21,7 +21,7 @@ class PhpHttpDriver implements HttpDriverInterface
     function setHeaders(array $headers)
     {
         foreach ($headers as $name => $value) {
-            //header("$name: $value");
+            header("$name: $value");
         }
     }
 
