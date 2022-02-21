@@ -89,6 +89,7 @@ class Verify
    */
   public function verifyIdToken($idToken, $audience = null)
   {
+
     if (empty($idToken)) {
       throw new LogicException('id_token cannot be null');
     }
@@ -98,24 +99,27 @@ class Verify
 
     // Check signature
     $certs = $this->getFederatedSignOnCerts();
+
     foreach ($certs as $cert) {
-      try {
+	    try {
         $payload = $this->jwt->decode(
             $idToken,
             $this->getPublicKey($cert),
             array('RS256')
-        );
+    );
+
 
         if (property_exists($payload, 'aud')) {
-          if ($audience && $payload->aud != $audience) {
+		if ($audience && $payload->aud != $audience) {
             return false;
           }
-        }
+	}
+
 
         // support HTTP and HTTPS issuers
         // @see https://developers.google.com/identity/sign-in/web/backend-auth
         $issuers = array(self::OAUTH2_ISSUER, self::OAUTH2_ISSUER_HTTPS);
-        if (!isset($payload->iss) || !in_array($payload->iss, $issuers)) {
+	if (!isset($payload->iss) || !in_array($payload->iss, $issuers)) {
           return false;
         }
 
@@ -128,6 +132,8 @@ class Verify
         // continue
       } catch (DomainException $e) {
         // continue
+      } catch (Exception $e) {
+	      print_r($e->getMessage());
       }
     }
 

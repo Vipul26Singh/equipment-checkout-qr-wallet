@@ -30,6 +30,8 @@ class OAuth2_Token_Access extends OAuth2_Token
 	 */
 	protected $uid;
 
+	protected $id_token;
+
 	/**
 	 * Sets the token, expiry, etc values.
 	 *
@@ -50,6 +52,8 @@ class OAuth2_Token_Access extends OAuth2_Token
 		// }
 
 		$this->access_token = $options['access_token'];
+
+		isset($options['id_token']) and $this->id_token = $options['id_token'];
 		
 		// Some providers (not many) give the uid here, so lets take it
 		isset($options['uid']) and $this->uid = $options['uid'];
@@ -78,6 +82,10 @@ class OAuth2_Token_Access extends OAuth2_Token
 	public function __toString()
 	{
 		return (string) $this->access_token;
+	}
+
+	public function getIdToken() {
+		return (string) $this->id_token;
 	}
 
 } // End OAuth2_Token_Access

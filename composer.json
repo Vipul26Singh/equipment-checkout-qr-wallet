@@ -16,7 +16,9 @@
 		"compwright/codeigniter-installers": "*",
         "maximebf/debugbar": ">=1.0.0",
 		"filp/whoops": "^2.1",
-		"google/apiclient": "^2.12"
+		"google/apiclient": "^2.12.1",
+		"guzzlehttp/guzzle": "^7.4",
+		"firebase/php-jwt": "5.5.1"
 	},
 	"suggest": {
 		"paragonie/random_compat": "Provides better randomness in PHP 5.x"

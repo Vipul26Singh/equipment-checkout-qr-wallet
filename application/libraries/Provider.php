@@ -212,10 +212,13 @@ abstract class OAuth2_Provider
 				throw new OutOfBoundsException("Method '{$this->method}' must be either GET or POST");
 		}
 
+
 		if ( ! empty($return['error']))
 		{
 			throw new OAuth2_Exception($return);
 		}
+
+
 		
 		switch ($params['grant_type'])
 		{

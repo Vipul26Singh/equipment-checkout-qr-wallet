@@ -15,6 +15,7 @@ class OAuth2_Provider_Google extends OAuth2_Provider
 	 * @var  string  the method to use when requesting tokens
 	 */
 	public $method = 'POST';
+	private $config_options = array();
 
 	/**
 	 * @var  string  scope separator, most use "," but some like Google are spaces
@@ -38,6 +39,8 @@ class OAuth2_Provider_Google extends OAuth2_Provider
 			'https://www.googleapis.com/auth/userinfo.profile', 
 			'https://www.googleapis.com/auth/userinfo.email'
 		);
+
+		$this->config_options = $options;
 	
 		// Array it if its string
 		$options['scope'] = (array) $options['scope'];
@@ -80,5 +83,16 @@ class OAuth2_Provider_Google extends OAuth2_Provider
 			'description' => null,
 			'urls' => array(),
 		);
+	}
+
+	public function validateIdToken($id_token) {
+		$client = new Google_Client(['client_id' => $this->config_options['id']]);
+		$payload = $client->verifyIdToken($id_token);
+		if ($payload) {
+			$userid = $payload['sub'];
+			return array('status' => true, 'payload' => $payload);
+		} else {
+			return array('status' => true, 'payload' => array());
+		}
 	}
 }

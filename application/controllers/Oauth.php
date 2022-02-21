@@ -47,11 +47,16 @@ class Oauth extends Admin
 		{
 			try
 			{
-				echo "authorized";
-				die();
 				$token = $provider->access($_GET['code']);
-			
+				$jwt_token_verification = $provider->validateIdToken($token->getIdToken());
+			       
+				if(!$jwt_token_verification['status']){
+					echo "Invalid login attempt";
+					die();
+				}	
 				$user = $provider->get_user_info($token);
+
+
 
 				$userdb = $this->model_user->get_user_oauth($user['email'], $provider_type);
 
