@@ -42,15 +42,15 @@ class Add_column extends Admin
                         }
 
 			if( !$this->db->field_exists('updated_at', $val['myTables']) ) {
-                                $fields['updated_at'] = array('type' => 'TIMESTAMP', 'null' => TRUE, 'default' => NULL);
+                                $fields[] = 'updated_at datetime default current_timestamp on update current_timestamp';
                         }
 
 			if( !$this->db->field_exists('created_at', $val['myTables']) ) {
-                                $fields['created_at'] = array('type' => 'TIMESTAMP', 'null' => TRUE, 'default' => NULL);
+				$fields[] = 'created_at datetime default current_timestamp';
                         }
 
 			$this->dbforge->add_column($val['myTables'], $fields);
-	
+
 			if(!empty($create_index)) {
 				$this->db->query($create_index);
 			}
@@ -62,6 +62,17 @@ class Add_column extends Admin
 
 		set_message('Database modified', 'success');
 		redirect_back();
+	}
+
+	public function reset() {
+		$tables=$this->db->query("SELECT t.TABLE_NAME AS myTables FROM INFORMATION_SCHEMA.TABLES AS t WHERE t.TABLE_SCHEMA = '{$this->db->database}' and t.TABLE_TYPE = 'BASE TABLE'")->result_array();
+		foreach($tables as $key => $val) {
+			$this->load->dbforge();
+			$this->dbforge->drop_column($val['myTables'], 'updated_at');
+			$this->dbforge->drop_column($val['myTables'], 'created_at');
+		}
+
+		$this->index();
 	}
 
 }
