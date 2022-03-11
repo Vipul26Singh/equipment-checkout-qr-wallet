@@ -13,6 +13,7 @@ private $primary_key 	= '{primary_key}';
 	private $table_name 	= '{table_name}';
 	private $field_search 	= ['<?= implode("', '", $field_in_column); ?>'];
 	private $user_restriction = '{user_restriction}';
+	private $user_restriction_columns = '{user_restriction_columns}';
 <?php $search_type_array = 'array(' ; 
 	 	foreach ($this->crud_builder->getFieldShowInAddForm(true) as $input => $option) { 
 			 $search_type_array .= '"'.$input.'" => "'.$option['input_type'].'",' ;
@@ -33,6 +34,7 @@ private $primary_key 	= '{primary_key}';
 			'user_restriction' => $this->user_restriction,
 			'export_select_string' => $this->export_select_string,
 			'field_search_type' => $this->field_search_type,
+			'user_restriction_columns' => $this->user_restriction_columns
 		 );
 
 		parent::__construct($config);
@@ -99,7 +101,7 @@ private $primary_key 	= '{primary_key}';
                                 $where .= " and ";
                         }
 
-                        $where .= " {table_name}.created_by = {$this->aauth->get_user_id()} ";
+                        $where .= $this->get_user_filter_condition();
                 }
 
 
@@ -141,7 +143,7 @@ private $primary_key 	= '{primary_key}';
                                 $where .= " and ";
                         }
 
-                        $where .= " {table_name}.created_by = {$this->aauth->get_user_id()} ";
+                        $where .= $this->get_user_filter_condition();
 
                 }
 

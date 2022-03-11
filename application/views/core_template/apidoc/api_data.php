@@ -1,4 +1,8 @@
-<?php if (!empty($primary_key)): ?>
+<?php
+$has_previous = false;
+if (!empty($primary_key) && !empty($has_add)): 
+$has_previous = true;
+?>
 {
     "type": "post",
     "url": "/{table_name}/add",
@@ -99,8 +103,14 @@
     },
     "filename": "application/controllers/api/<?= ucfirst($table_name); ?>.php",
     "groupTitle": "{table_name_uc_no_space}"
-  },
+  }
 <?php endif; ?>
+<?php if (!empty($primary_key) && !empty($has_all)): 
+	if($has_previous) {
+		echo ",";
+	}
+	$has_previous = true;
+?>
   {
     "type": "get",
     "url": "/{table_name}/all",
@@ -219,8 +229,14 @@
     },
     "filename": "application/controllers/api/{table_name_uc_no_space}.php",
     "groupTitle": "{table_name_uc_no_space}"
-  },
-<?php if (!empty($primary_key)): ?>
+  }
+<?php endif; ?>
+<?php if (!empty($primary_key) && !empty($has_delete) ): 
+	if($has_previous) {
+                echo ",";
+        }
+        $has_previous = true;
+?>
   {
     "type": "post",
     "url": "/{table_name_uc_no_space}/delete",
@@ -314,8 +330,15 @@
     },
     "filename": "application/controllers/api/{table_name_uc_no_space}.php",
     "groupTitle": "{table_name_uc_no_space}"
-  },
+  }
 <?php endif; ?>
+<?php if (!empty($primary_key) && !empty($has_detail)): 
+	if($has_previous) {
+                echo ",";
+        }
+        $has_previous = true;
+
+?>
   {
     "type": "get",
     "url": "/{table_name_uc_no_space}/detail",
@@ -417,8 +440,13 @@
     "filename": "application/controllers/api/{table_name_uc_no_space}.php",
     "groupTitle": "{table_name_uc_no_space}"
   }
-<?php if (!empty($primary_key) ): ?>
-,
+<?php endif; ?>
+<?php if (!empty($primary_key) && !empty($has_update)): 
+	if($has_previous) {
+                echo ",";
+        }
+        $has_previous = true;
+?>
   {
     "type": "post",
     "url": "/{table_name_uc_no_space}/update",

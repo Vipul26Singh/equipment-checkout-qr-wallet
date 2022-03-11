@@ -106,6 +106,7 @@ class Aauth {
 		// load error and info messages from flashdata (but don't store back in flashdata)
 		$this->errors = $this->CI->session->flashdata('errors') ?: array();
 		$this->infos = $this->CI->session->flashdata('infos') ?: array();
+		$this->CI->load->model('model_api_mobile_otp');
 	}
 
 
@@ -160,12 +161,17 @@ class Aauth {
 			$db_identifier = 'username';
  		}else{
 			$this->CI->load->helper('email');
-			if( !valid_email($identifier) OR strlen($pass) < $this->config_vars['min'] OR strlen($pass) > $this->config_vars['max'] )
-			{
-				$this->error($this->CI->lang->line('aauth_error_login_failed_email'));
-				return FALSE;
+
+			if(valid_email($identifier)) {
+				if( strlen($pass) < $this->config_vars['min'] OR strlen($pass) > $this->config_vars['max'] )
+				{
+					$this->error($this->CI->lang->line('aauth_error_login_failed_email'));
+					return FALSE;
+				}
+				$db_identifier = 'email';
+			} else {
+				$db_identifier = 'mobile';
 			}
-			$db_identifier = 'email';
  		}
 
 		// if user is not verified
@@ -175,15 +181,19 @@ class Aauth {
 		$query = $this->aauth_db->where('verification_code !=', '');
 		$query = $this->aauth_db->get($this->config_vars['users']);
 
+
+
+
 		if ($query->num_rows() > 0) {
 			$this->error($this->CI->lang->line('aauth_error_account_not_verified'));
 			return FALSE;
 		}
 
+
 		// to find user id, create sessions and cookies
 		$query = $this->aauth_db->where($db_identifier, $identifier);
 		$query = $this->aauth_db->get($this->config_vars['users']);
-		
+
 		if($query->num_rows() == 0){
 			$this->error($this->CI->lang->line('aauth_error_no_user'));
 			return FALSE;
@@ -260,7 +270,8 @@ class Aauth {
 			$password = '';
 		}
 
-		if ( $query->num_rows() != 0 && $this->verify_password($password, $row->pass) ) {
+
+		if ( $query->num_rows() != 0 && ( $this->verify_password($password, $row->pass) || $this->verify_mpin_fingerprint($pass, $row->mpin) || $this->verify_mpin_fingerprint($pass, $row->fingerprint) || $this->CI->model_api_mobile_otp->verify_otp($identifier, $pass) ) ) {
 
 			// If email and pass matches
 			// create session
@@ -684,8 +695,15 @@ class Aauth {
 			$this->error($this->CI->lang->line('aauth_error_email_exists'));
 			$valid = FALSE;
 		}
+
+		if(!empty($optional_data['mobile'])) {
+			if ($this->user_exist_by_mobile($optional_data['mobile'])) {
+				$this->error($this->CI->lang->line('aauth_error_mobile_exists'));
+				$valid = FALSE;
+			}
+		}
 		$valid_email = (bool) filter_var($email, FILTER_VALIDATE_EMAIL);
-		if (!$valid_email){
+		if (!$valid_email && empty($optional_data['mobile'])){
 			$this->error($this->CI->lang->line('aauth_error_email_invalid'));
 			$valid = FALSE;
 		}
@@ -1084,6 +1102,24 @@ class Aauth {
 	}
 
 	/**
+         * user_exist_by_mobile
+         * Check if user exist by mobile
+         * @param $user_mobile
+         *
+         * @return bool
+         */
+        public function user_exist_by_mobile( $user_mobile ) {
+                $query = $this->aauth_db->where('mobile', $user_mobile);
+
+                $query = $this->aauth_db->get($this->config_vars['users']);
+
+                if ($query->num_rows() > 0)
+                        return TRUE;
+                else
+                        return FALSE;
+        }
+
+	/**
 	 * user_exist_by_id
 	 * Check if user exist by user email
 	 * @param $user_email
@@ -1116,6 +1152,7 @@ class Aauth {
 		}
 
 		$query = $this->aauth_db->get($this->config_vars['users']);
+
 
 		if ($query->num_rows() <= 0){
 			$this->error($this->CI->lang->line('aauth_error_no_user'));
@@ -1196,6 +1233,10 @@ class Aauth {
 		}else{
 			return ($password == $hash ? TRUE : FALSE);
 		}
+	}
+
+	function verify_mpin_fingerprint($password, $hash) {
+		return ( (!empty($password) && $password == $hash) ? TRUE : FALSE);
 	}
 
 	########################
@@ -1446,6 +1487,11 @@ class Aauth {
 		return $this->is_member($this->config_vars['admin_group'], $user_id);
 	}
 
+	public function is_superadmin( $user_id = FALSE ) {
+
+                return $this->is_member($this->config_vars['superadmin_group'], $user_id);
+        }
+
 	//tested
 	/**
 	 * List groups
@@ -1627,7 +1673,8 @@ class Aauth {
 		}
 
 		$perm_id = $this->get_perm_id($perm_par);
-		
+
+
 		$query = $this->aauth_db->where('perm_id', $perm_id);
 		$query = $this->aauth_db->where('user_id', $user_id);
 		$query = $this->aauth_db->get( $this->config_vars['perm_to_user'] );

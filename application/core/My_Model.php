@@ -8,6 +8,7 @@ class MY_Model extends CI_Model {
     private $table_name = 'table';
     private $field_search = array();
     private $user_restriction = '';
+    private $user_restriction_columns = '';
     private $export_select_string = '';
     private $field_search_type = array();
 
@@ -33,23 +34,42 @@ class MY_Model extends CI_Model {
 
 	    $user_id = $this->aauth->get_user_id();
 
-	    if($this->aauth->is_admin($user_id)){
+	    if($this->aauth->is_admin($user_id) || $this->aauth->is_superadmin($user_id)){
 		    return false;
 	    }
 
-	    if(empty($this->user_restriction) || ($this->user_restriction != 'yes' && $this->user_restriction != 'YES')) {
+	    if(empty($this->user_restriction) || ($this->user_restriction != 'yes' && $this->user_restriction != 'YES' && $this->user_restriction != '1')) {
 		    return false;
 	    }
 
 	    return true;
     }
 
+    public function get_user_filter_condition(){
+	    $user_id = $this->aauth->get_user_id();
+
+	    if(empty($this->user_restriction_columns)) {
+		return "{$this->table_name}.created_by =   {$user_id}";
+	    } else {
+		    $where_clause = '(';
+		    $condition_column = explode(',', $this->user_restriction_columns);
+
+		    foreach($condition_column as $cond) {
+			    $where_clause .= " {$this->table_name}.{$cond} = {$user_id} or";
+		    }
+		    $where_clause = substr($where_clause, 0, -2);
+
+		    $where_clause .= ') ';
+		    return $where_clause;
+	    }
+    }
+
 
     public function remove($id = NULL)
     {
-	if($this->apply_user_filter()) {
-		$this->db->where($this->table_name.'.created_by',  $this->aauth->get_user_id());	
-	}
+	    if($this->apply_user_filter()) {
+		    $this->db->where($this->get_user_filter_condition());	
+	    }
 
         $this->db->where($this->primary_key, $id);
         return $this->db->delete($this->table_name);
@@ -58,7 +78,7 @@ class MY_Model extends CI_Model {
     public function change($id = NULL, $data = array())
     {        
 	    if($this->apply_user_filter()) {
-		    $this->db->where($this->table_name.'.created_by',  $this->aauth->get_user_id());                                   
+		     $this->db->where($this->get_user_filter_condition());
 	    }
 
 	    if(empty($data['updated_by'])) {
@@ -82,7 +102,7 @@ class MY_Model extends CI_Model {
         }
 
 	if($this->apply_user_filter()) {
-                $this->db->where($this->table_name.'.created_by',  $this->aauth->get_user_id());
+		 $this->db->where($this->get_user_filter_condition());
         }
 
         $this->db->where("".$this->table_name.'.'.$this->primary_key,$id);
@@ -100,9 +120,9 @@ class MY_Model extends CI_Model {
 
     public function find_all()
     {
-	if($this->apply_user_filter()) {
-                $this->db->where($this->table_name.'.created_by',  $this->aauth->get_user_id());
-        }
+	    if($this->apply_user_filter()) {
+		    $this->db->where($this->get_user_filter_condition());
+	    }
 
         $this->db->order_by($this->primary_key, 'DESC');
         $query = $this->db->get($this->table_name);
@@ -125,31 +145,32 @@ class MY_Model extends CI_Model {
 
     public function get_all_data($table = '')
     {
-	if($this->apply_user_filter()) {
-                $this->db->where($table.'.created_by',  $this->aauth->get_user_id());
-        }
+	    if($this->apply_user_filter()) {
+		    $this->db->where($this->get_user_filter_condition());
+	    }
 
-        $query = $this->db->get($table);
+	    $query = $this->db->get($table);
 
-        return $query->result();
+	    return $query->result();
     }
 
 
     public function get_single($where)
     {
-	if($this->apply_user_filter()) {
-                $this->db->where($this->table_name.'.created_by',  $this->aauth->get_user_id());
-        }
+	    if($this->apply_user_filter()) {
+		    $this->db->where($this->get_user_filter_condition());
+	    }
 
-        $query = $this->db->get_where($this->table_name, $where);
+	    $query = $this->db->get_where($this->table_name, $where);
 
-        return $query->row();
+	    return $query->row();
     }
 
     public function scurity($input)
     {
         return mysqli_real_escape_string($this->db->conn_id, $input);
     }
+
 
     public function search_filter() {
 	    $iterasi = 1;
@@ -204,7 +225,7 @@ class MY_Model extends CI_Model {
         $this->load->library('excel');
 
 	if($this->apply_user_filter()) {
-                $this->db->where($table.'.created_by',  $this->aauth->get_user_id());
+		 $this->db->where($this->get_user_filter_condition());
         }
 
 	$extra_where = $this->search_filter();
@@ -340,7 +361,7 @@ class MY_Model extends CI_Model {
         );
 
 	if($this->apply_user_filter()) {
-                $this->db->where($this->table_name.'.created_by',  $this->aauth->get_user_id());
+		 $this->db->where($this->get_user_filter_condition());
         }
 
 	$extra_where = $this->search_filter();

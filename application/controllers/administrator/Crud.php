@@ -177,6 +177,7 @@ class Crud extends Admin
 				'redirect_add' => $this->input->post('redirect_add'),
 				'redirect_update' => $this->input->post('redirect_update'),
 				'user_restriction'           => $this->input->post('user_restriction'),
+				'user_restriction_columns'	=> $this->input->post('user_restriction_columns'),
 				'field_filterable' => $this->crud_builder->getFilterableField(),
                                 'field_exportable' => $this->crud_builder->getExportableField(),
 			];
@@ -251,6 +252,7 @@ class Crud extends Admin
 				'redirect_add' => $this->input->post('redirect_add'),
                                 'redirect_update' => $this->input->post('redirect_update'),
 				'user_restriction'           => $this->input->post('user_restriction'),
+				'user_restriction_columns'           => $this->input->post('user_restriction_columns')
 			];
 
 			if ($id_crud = $this->model_crud->crud_exist($this->input->post('table_name'))) {

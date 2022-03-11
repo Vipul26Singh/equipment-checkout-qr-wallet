@@ -109,13 +109,28 @@
                             <input class="flat-red check page_update" type="checkbox" id="update" value="yes" name="update" checked> <?= cclang('update'); ?> 
                           </label>
                         </div>
-			<div class="col-xs-3">
-                          <label>
-                            <input class="flat-red check page_update" type="checkbox" id="user_restriction" value="yes" name="user_restriction"> User Restriction
-                          </label>
+                     </div>
+		  </div>
+
+<div class="form-group row">
+                        <div class="col-sm-2"></div>
+                        <div class="col-sm-8">
+                        <div class="col-sm-8 padding-left-0">
+                                        <label>
+                                                <input class="flat-red check page_update" type="checkbox" id="user_restriction" value="1" name="user_restriction"> User Restriction
+                                        </label>
+                                </div>
                         </div>
+                </div>
+
+                  <div class="form-group ">
+                     <label for="label" class="col-sm-2 control-label">Column for user restriction </i></label>
+                     <div class="col-sm-8">
+                        <input type="text" class="form-control" name="user_restriction_columns" id="user_restriction_columns" placeholder="created_by" value="<?= set_value('user_restriction_columns'); ?>">
+                        <small class="info help-block">, seperated without space. default is created_by</small>
                      </div>
                   </div>
+
 
                   <hr>
                   <div class="wrapper-crud">

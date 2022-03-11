@@ -87,9 +87,55 @@
                           <label>
                             <input class="flat-red check page_read" type="checkbox" id="x_token" value="yes" name="x_token" <?= $rest->x_token == 'yes' ? 'checked': ''; ?>> X-Token 
                           </label>
+			</div>
+
+<div class="col-md-2 padding-left-0">
+                          <label>
+                            <input class="flat-red check page_read" type="checkbox" id="has_add" value="1" name="has_add" <?= $rest->has_add == '1' ? 'checked': ''; ?>> Add
+                          </label>
+			</div>
+
+<div class="col-md-2 padding-left-0">
+                          <label>
+                            <input class="flat-red check page_read" type="checkbox" id="has_update" value="1" name="has_update" <?= $rest->has_update == '1' ? 'checked': ''; ?>> Update
+                          </label>
+			</div>
+
+<div class="col-md-2 padding-left-0">
+                          <label>
+                            <input class="flat-red check page_read" type="checkbox" id="has_read" value="1" name="has_read" <?= $rest->has_read == '1' ? 'checked': ''; ?>> Read
+                          </label>
+			</div>
+
+<div class="col-md-2 padding-left-0">
+                          <label>
+                            <input class="flat-red check page_read" type="checkbox" id="has_delete" value="1" name="has_delete" <?= $rest->has_delete == '1' ? 'checked': ''; ?>> Delete
+                          </label>
                         </div>
                      </div>
+		  </div>
+
+		<div class="form-group row">
+                        <div class="col-sm-2"></div>
+                        <div class="col-sm-8">
+                        <div class="col-sm-8 padding-left-0">
+                                        <label>
+                                                <input class="flat-red check page_update" type="checkbox" id="user_restriction" value="1" name="user_restriction" <?= $rest->user_restriction == '1' ? 'checked' : ''; ?>> User Restriction
+                                        </label>
+                                </div>
+                        </div>
+                </div>
+
+                  <div class="form-group ">
+                     <label for="label" class="col-sm-2 control-label">Column for user restriction </i></label>
+                     <div class="col-sm-8">
+                        <input type="text" class="form-control" name="user_restriction_columns" id="user_restriction_columns" placeholder="created_by" value="<?= set_value('user_restriction_columns', $rest->user_restriction_columns); ?>">
+                        <small class="info help-block">, seperated without space. default is created_by</small>
+                     </div>
                   </div>
+
+
+
 
                   <hr>
                   <div class="wrapper-rest">

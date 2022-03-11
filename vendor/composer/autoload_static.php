@@ -4,15 +4,15 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit13e7765008d9187172b77548f69c8496
+class ComposerStaticInit8fc9fb86d83d5e95869f49f4b66f262d
 {
     public static $files = array (
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
         'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
+        '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
-        '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
         'decc78cc4436b1292c6c0d151b19445c' => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib/bootstrap.php',
         '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
         '1f87db08236948d07391152dccb70f04' => __DIR__ . '/..' . '/google/apiclient-services/autoload.php',
@@ -23,6 +23,11 @@ class ComposerStaticInit13e7765008d9187172b77548f69c8496
         'p' => 
         array (
             'phpseclib3\\' => 11,
+        ),
+        'c' => 
+        array (
+            'chillerlan\\Settings\\' => 20,
+            'chillerlan\\QRCode\\' => 18,
         ),
         'W' => 
         array (
@@ -45,6 +50,10 @@ class ComposerStaticInit13e7765008d9187172b77548f69c8496
         'M' => 
         array (
             'Monolog\\' => 8,
+        ),
+        'I' => 
+        array (
+            'Infobip\\' => 8,
         ),
         'G' => 
         array (
@@ -69,6 +78,14 @@ class ComposerStaticInit13e7765008d9187172b77548f69c8496
         'phpseclib3\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib',
+        ),
+        'chillerlan\\Settings\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/chillerlan/php-settings-container/src',
+        ),
+        'chillerlan\\QRCode\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/chillerlan/php-qrcode/src',
         ),
         'Whoops\\' => 
         array (
@@ -111,6 +128,10 @@ class ComposerStaticInit13e7765008d9187172b77548f69c8496
         array (
             0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
         ),
+        'Infobip\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/infobip/infobip-api-php-client/Infobip',
+        ),
         'GuzzleHttp\\Psr7\\' => 
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/psr7/src',
@@ -150,7 +171,7 @@ class ComposerStaticInit13e7765008d9187172b77548f69c8496
         array (
             'org\\bovigo\\vfs' => 
             array (
-                0 => __DIR__ . '/..' . '/mikey179/vfsStream/src/main/php',
+                0 => __DIR__ . '/..' . '/mikey179/vfsstream/src/main/php',
             ),
         ),
         'C' => 
@@ -185,6 +206,7 @@ class ComposerStaticInit13e7765008d9187172b77548f69c8496
         'Google_Task_Retryable' => __DIR__ . '/..' . '/google/apiclient/src/aliases.php',
         'Google_Task_Runner' => __DIR__ . '/..' . '/google/apiclient/src/aliases.php',
         'Google_Utils_UriTemplate' => __DIR__ . '/..' . '/google/apiclient/src/aliases.php',
+        'PhpToken' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/PhpToken.php',
         'Stringable' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
         'UnhandledMatchError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
         'ValueError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
@@ -193,10 +215,10 @@ class ComposerStaticInit13e7765008d9187172b77548f69c8496
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit13e7765008d9187172b77548f69c8496::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit13e7765008d9187172b77548f69c8496::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit13e7765008d9187172b77548f69c8496::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit13e7765008d9187172b77548f69c8496::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit8fc9fb86d83d5e95869f49f4b66f262d::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit8fc9fb86d83d5e95869f49f4b66f262d::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit8fc9fb86d83d5e95869f49f4b66f262d::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit8fc9fb86d83d5e95869f49f4b66f262d::$classMap;
 
         }, null, ClassLoader::class);
     }

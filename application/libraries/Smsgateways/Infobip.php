@@ -1,10 +1,11 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+use Infobip as IBP;
 
 class Infobip {
 
-	$api_key = null;
-	$base_url = '';
+	private $api_key = null;
+	private $base_url = '';
 	public function __construct() {
 		$this->api_key = get_option('infobip_api_key');
 		$this->base_url = get_option('infobip_base_url');
@@ -15,20 +16,21 @@ class Infobip {
 	}
 
 	public function send($mobile_number, $msg) {
-		$configuration = (new Configuration())
+
+		$configuration = (new IBP\Configuration())
 			->setHost($this->base_url)
 			->setApiKeyPrefix('Authorization', 'App')
 			->setApiKey('Authorization', $this->api_key);
 
 		$client = new GuzzleHttp\Client();
 
-		$sendSmsApi = new SendSMSApi($client, $configuration);
-		$destination = (new SmsDestination())->setTo($mobile_number);
-		$message = (new SmsTextualMessage())
+		$sendSmsApi = new IBP\Api\SendSmsApi($client, $configuration);
+		$destination = (new IBP\Model\SmsDestination())->setTo($mobile_number);
+		$message = (new IBP\Model\SmsTextualMessage())
 			->setFrom('InfoSMS')
 			->setText($msg)
 			->setDestinations([$destination]);
-		$request = (new SmsAdvancedTextualRequest())
+		$request = (new IBP\Model\SmsAdvancedTextualRequest())
 			->setMessages([$message]);
 
 

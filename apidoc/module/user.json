@@ -572,16 +572,23 @@
           {
             "group": "Parameter",
             "type": "String",
-            "optional": false,
+            "optional": true,
             "field": "Email",
-            "description": "<p>Mandatory email of Users.</p>"
+            "description": "<p>Mandatory email of Users if mobile is not given.</p>"
+          },
+	  {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "Mobile",
+            "description": "<p>Mandatory mobile of Users if email is not given.</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
             "field": "Password",
-            "description": "<p>Mandatory password of Users.</p>"
+            "description": "<p>Mandatory password of Users. Can be mpin, fingerprint, otp or password</p>"
           }
         ]
       }
@@ -866,6 +873,13 @@
             "field": "Email",
             "description": "<p>Mandatory email of Users.</p>"
           },
+	  {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "mobile",
+            "description": "<p>Optional mobile of Users.</p>"
+          },
           {
             "group": "Parameter",
             "type": "String",
@@ -895,6 +909,497 @@
             "optional": false,
             "field": "Id",
             "description": "<p>id of Users.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "Status",
+            "description": "<p>status response api.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "Message",
+            "description": "<p>message response api.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "ValidationError",
+            "description": "<p>Error validation.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Not Acceptable",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "application/controllers/api/User.php",
+    "groupTitle": "User"
+  },
+  {
+    "type": "post",
+    "url": "/user/verify_mpin",
+    "title": "Verify User Mpin.",
+    "version": "0.1.0",
+    "name": "VerifyMpinUser",
+    "group": "User",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-API-KEY",
+            "description": "<p>Users unique access-key.</p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-Token",
+            "description": "<p>Users unique token.</p>"
+          }
+        ]
+      }
+    },
+    "permission": [
+      {
+        "name": "Group Cant be Accessed permission name : user_profile"
+      }
+    ],
+   "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "mpin",
+            "description": "<p>Mandatory mpin of Users.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "Status",
+            "description": "<p>status response api.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "Message",
+            "description": "<p>message response api.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "ValidationError",
+            "description": "<p>Error validation.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Not Acceptable",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "application/controllers/api/User.php",
+    "groupTitle": "User"
+  },
+  {
+    "type": "post",
+    "url": "/user/update_mpin",
+    "title": "update User Mpin.",
+    "version": "0.1.0",
+    "name": "UpdateMpinUser",
+    "group": "User",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-API-KEY",
+            "description": "<p>Users unique access-key.</p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-Token",
+            "description": "<p>Users unique token.</p>"
+          }
+        ]
+      }
+    },
+    "permission": [
+      {
+        "name": "Group Cant be Accessed permission name : user_profile"
+      }
+    ],
+   "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "new_mpin",
+            "description": "<p>Mandatory new mpin of Users.</p>"
+          },
+	  {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "old_mpin",
+            "description": "<p>Mandatory old mpin of Users. Optional in case of first time registration.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "Status",
+            "description": "<p>status response api.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "Message",
+            "description": "<p>message response api.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "ValidationError",
+            "description": "<p>Error validation.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Not Acceptable",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "application/controllers/api/User.php",
+    "groupTitle": "User"
+  },
+  {
+    "type": "post",
+    "url": "/user/reset_mpin",
+    "title": "Reset User Mpin in case user forgot mpin.",
+    "version": "0.1.0",
+    "name": "ResetMpinUser",
+    "group": "User",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-API-KEY",
+            "description": "<p>Users unique access-key.</p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-Token",
+            "description": "<p>Users unique token.</p>"
+          }
+        ]
+      }
+    },
+    "permission": [
+      {
+        "name": "Group Cant be Accessed permission name : user_profile"
+      }
+    ],
+   "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "new_mpin",
+            "description": "<p>Mandatory new mpin of Users.</p>"
+          },
+	  {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "mobile_otp",
+            "description": "<p>Otp received on mobile number. Call generate otp before calling this one</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "Status",
+            "description": "<p>status response api.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "Message",
+            "description": "<p>message response api.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "ValidationError",
+            "description": "<p>Error validation.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Not Acceptable",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "application/controllers/api/User.php",
+    "groupTitle": "User"
+  },
+  {
+    "type": "post",
+    "url": "/user/verify_fingerprint",
+    "title": "Verify User Fingerprint.",
+    "version": "0.1.0",
+    "name": "VerifyFingerprintUser",
+    "group": "User",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-API-KEY",
+            "description": "<p>Users unique access-key.</p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-Token",
+            "description": "<p>Users unique token.</p>"
+          }
+        ]
+      }
+    },
+    "permission": [
+      {
+        "name": "Group Cant be Accessed permission name : user_profile"
+      }
+    ],
+   "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "fingerprint",
+            "description": "<p>Mandatory fingerprint of Users.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "Status",
+            "description": "<p>status response api.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "Message",
+            "description": "<p>message response api.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "ValidationError",
+            "description": "<p>Error validation.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Not Acceptable",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "application/controllers/api/User.php",
+    "groupTitle": "User"
+  },
+  {
+    "type": "post",
+    "url": "/user/update_fingerprint",
+    "title": "update User fingeprint.",
+    "version": "0.1.0",
+    "name": "UpdateFingerprintUser",
+    "group": "User",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-API-KEY",
+            "description": "<p>Users unique access-key.</p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-Token",
+            "description": "<p>Users unique token.</p>"
+          }
+        ]
+      }
+    },
+    "permission": [
+      {
+        "name": "Group Cant be Accessed permission name : user_profile"
+      }
+    ],
+   "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "new_fingerprint",
+            "description": "<p>Mandatory new fingerprint of Users.</p>"
+          },
+	 {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "old_fingerprint",
+            "description": "<p>Mandatory old fingerprint of Users. Optional in case fresh fingerprint</p>"
           }
         ]
       }
@@ -989,6 +1494,13 @@
             "optional": false,
             "field": "Email",
             "description": "<p>Mandatory email of Users.</p>"
+          },
+	  {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "mobile",
+            "description": "<p>Optional mobile of Users.</p>"
           },
           {
             "group": "Parameter",

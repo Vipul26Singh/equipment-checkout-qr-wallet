@@ -780,28 +780,44 @@ class API extends REST_Controller
     
     public function __construct()
     {
-        parent::__construct();
-	$this->config->set_item('csrf_protection', false);
-	$api_has_json_input = file_get_contents("php://input");
+	    parent::__construct();
+	    $this->config->set_item('csrf_protection', false);
+	    $api_has_json_input = file_get_contents("php://input");
 
-	if(!empty($api_has_json_input)) {
-		$_POST = json_decode(file_get_contents("php://input"), true);
-	}
+	    if(!empty($api_has_json_input)) {
+		    $_POST = json_decode(file_get_contents("php://input"), true);
+	    }
 
-        $this->form_validation->set_error_delimiters('', '');
-        $this->load->model('model_user');
+	    $this->form_validation->set_error_delimiters('', '');
+	    $this->load->model('model_user');
 
-        if ($lang = $this->input->get('lang')) {
-            $this->config->set_item('language', $lang);
+	    if ($lang = $this->input->get('lang')) {
+		    $this->config->set_item('language', $lang);
 
-            $this->lang->load([
-                'web',
-                'form_validation',
-                'upload',
-                'db',
-                'aauth',
-            ], $lang );
-        }
+		    $this->lang->load([
+			    'web',
+			    'form_validation',
+			    'upload',
+			    'db',
+			    'aauth',
+		    ], $lang );
+	    }
+
+	    if(!empty($this->jwtGetToken())) {
+		    $row = $this->getUser($this->jwtGetToken());
+
+
+		    if(!empty($row)) {
+			    $sess_data = array(
+				    'id' => $row->id,
+				    'username' => $row->username,
+				    'email' => $row->email,
+				    'loggedin' => TRUE
+			    );
+
+			    $this->session->set_userdata($sess_data);
+		    }
+	    }
     }
 
     /**
@@ -922,6 +938,42 @@ class API extends REST_Controller
         return false;
     }
 
+    public function sanitiseUserObject($user_object)
+    {
+
+	    $user_object->mpin_registered = false;
+	    $user_object->fingerprint_registered = false;
+
+	    if(!empty($user_object->mpin)) {
+		$user_object->mpin_registered = true;
+	    }
+
+	    if(!empty($user_object->fingerprint)) {
+                $user_object->fingerprint_registered = true;
+	    }
+
+	    unset($user_object->mpin);
+	    unset($user_object->fingerprint);
+	    unset($user_object->top_secret);
+	    unset($user_object->pass);
+	    unset($user_object->ip_address);
+	    unset($user_object->created_by);
+	    unset($user_object->created_at);
+	    unset($user_object->updated_by);
+	    unset($user_object->updated_at);
+	    unset($user_object->oauth_uid);
+	    unset($user_object->forgot_exp);
+	    unset($user_object->remember_time);
+	    unset($user_object->remember_exp);
+	    unset($user_object->verification_code);
+	    unset($user_object->last_login);
+	    unset($user_object->last_activity);
+	    unset($user_object->date_created);
+
+	    $user_object->avatar = BASE_URL.'uploads/user/'.$user_object->avatar;
+	    return $user_object;
+    }
+
     /**
     * User is allowed
     * 
@@ -936,7 +988,8 @@ class API extends REST_Controller
             $user = $this->getUser($this->jwtGetToken());
         } else {
             $user = true;
-        }
+	}
+
 
         if (!$user) {
             $this->response([
@@ -946,11 +999,11 @@ class API extends REST_Controller
         } else {
             if (!isset($user->id)) {
                 return true;
-            }
-            
-            if ($this->aauth->is_allowed($perm, $user->id)) {
+	    }
+
+	    if ($this->aauth->is_allowed($perm, $user->id)) {
                 return true;
-            } else {
+	    } else {
                  $this->response([
                     'status'    => false,
                     'message'   => 'You are not allowed to access.',
@@ -970,9 +1023,10 @@ class API extends REST_Controller
     */
     public function getUserData($field_name = false)
     {
-        $user = $this->getUser($this->jwtGetToken());
+	    $user = $this->getUser($this->jwtGetToken());
 
-        if (!$user) {
+
+        if (!empty($user)) {
             if ($field_name) {
                 if (isset($user->$field_name)) {
                     return $user->$field_name;

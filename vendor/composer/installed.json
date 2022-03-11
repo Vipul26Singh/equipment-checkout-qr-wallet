@@ -1,5 +1,121 @@
 [
     {
+        "name": "chillerlan/php-qrcode",
+        "version": "3.4.1",
+        "version_normalized": "3.4.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/chillerlan/php-qrcode.git",
+            "reference": "468603b687a5fe75c1ff33857a45f1726c7b95a9"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/chillerlan/php-qrcode/zipball/468603b687a5fe75c1ff33857a45f1726c7b95a9",
+            "reference": "468603b687a5fe75c1ff33857a45f1726c7b95a9",
+            "shasum": ""
+        },
+        "require": {
+            "chillerlan/php-settings-container": "^1.2.2",
+            "ext-mbstring": "*",
+            "php": "^7.2 || ^8.0"
+        },
+        "require-dev": {
+            "phan/phan": "^3.2.2",
+            "phpunit/phpunit": "^8.5",
+            "setasign/fpdf": "^1.8.2"
+        },
+        "suggest": {
+            "chillerlan/php-authenticator": "Yet another Google authenticator! Also creates URIs for mobile apps.",
+            "setasign/fpdf": "Required to use the QR FPDF output."
+        },
+        "time": "2021-09-03T17:54:45+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "chillerlan\\QRCode\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Kazuhiko Arase",
+                "homepage": "https://github.com/kazuhikoarase"
+            },
+            {
+                "name": "Smiley",
+                "email": "smiley@chillerlan.net",
+                "homepage": "https://github.com/codemasher"
+            },
+            {
+                "name": "Contributors",
+                "homepage": "https://github.com/chillerlan/php-qrcode/graphs/contributors"
+            }
+        ],
+        "description": "A QR code generator. PHP 7.2+",
+        "homepage": "https://github.com/chillerlan/php-qrcode",
+        "keywords": [
+            "phpqrcode",
+            "qr",
+            "qr code",
+            "qrcode",
+            "qrcode-generator"
+        ]
+    },
+    {
+        "name": "chillerlan/php-settings-container",
+        "version": "1.2.2",
+        "version_normalized": "1.2.2.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/chillerlan/php-settings-container.git",
+            "reference": "d1b5284d6eb3a767459738bb0b20073f0cb3eeaf"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/chillerlan/php-settings-container/zipball/d1b5284d6eb3a767459738bb0b20073f0cb3eeaf",
+            "reference": "d1b5284d6eb3a767459738bb0b20073f0cb3eeaf",
+            "shasum": ""
+        },
+        "require": {
+            "ext-json": "*",
+            "php": "^7.2 || ^8.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "^8.4"
+        },
+        "time": "2021-09-03T17:33:25+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "chillerlan\\Settings\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Smiley",
+                "email": "smiley@chillerlan.net",
+                "homepage": "https://github.com/codemasher"
+            }
+        ],
+        "description": "A container class for immutable settings objects. Not a DI container. PHP 7.2+",
+        "homepage": "https://github.com/chillerlan/php-settings-container",
+        "keywords": [
+            "PHP7",
+            "Settings",
+            "container",
+            "helper"
+        ]
+    },
+    {
         "name": "compwright/codeigniter-installers",
         "version": "1.1.4",
         "version_normalized": "1.1.4.0",
@@ -244,17 +360,17 @@
     },
     {
         "name": "google/apiclient-services",
-        "version": "v0.236.0",
-        "version_normalized": "0.236.0.0",
+        "version": "v0.237.0",
+        "version_normalized": "0.237.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/googleapis/google-api-php-client-services.git",
-            "reference": "3aefd2914d9025a881ee93145de16f9e0f82443e"
+            "reference": "c10652adc29b4242237075acde318e83f88ab918"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/3aefd2914d9025a881ee93145de16f9e0f82443e",
-            "reference": "3aefd2914d9025a881ee93145de16f9e0f82443e",
+            "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/c10652adc29b4242237075acde318e83f88ab918",
+            "reference": "c10652adc29b4242237075acde318e83f88ab918",
             "shasum": ""
         },
         "require": {
@@ -263,7 +379,7 @@
         "require-dev": {
             "phpunit/phpunit": "^5.7||^8.5.13"
         },
-        "time": "2022-02-07T14:04:26+00:00",
+        "time": "2022-02-23T22:58:02+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -475,12 +591,12 @@
         },
         "installation-source": "dist",
         "autoload": {
-            "psr-4": {
-                "GuzzleHttp\\Promise\\": "src/"
-            },
             "files": [
                 "src/functions_include.php"
-            ]
+            ],
+            "psr-4": {
+                "GuzzleHttp\\Promise\\": "src/"
+            }
         },
         "notification-url": "https://packagist.org/downloads/",
         "license": [
@@ -613,6 +729,65 @@
         ]
     },
     {
+        "name": "infobip/infobip-api-php-client",
+        "version": "3.1.0",
+        "version_normalized": "3.1.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/infobip/infobip-api-php-client.git",
+            "reference": "665681ba6e00ec3931bb3e4df5b7e40fb58920b0"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/infobip/infobip-api-php-client/zipball/665681ba6e00ec3931bb3e4df5b7e40fb58920b0",
+            "reference": "665681ba6e00ec3931bb3e4df5b7e40fb58920b0",
+            "shasum": ""
+        },
+        "require": {
+            "ext-curl": "*",
+            "ext-json": "*",
+            "ext-mbstring": "*",
+            "guzzlehttp/guzzle": "^7.3",
+            "php": ">=7.2"
+        },
+        "require-dev": {
+            "friendsofphp/php-cs-fixer": "^2.12"
+        },
+        "time": "2021-11-25T16:49:08+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Infobip\\": "Infobip/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Infobip Support",
+                "email": "support@infobip.com",
+                "homepage": "https://www.infobip.com"
+            }
+        ],
+        "description": "PHP library for consuming Infobip's API",
+        "homepage": "https://www.infobip.com",
+        "keywords": [
+            "2fa",
+            "Infobip",
+            "api",
+            "msisdn",
+            "openapi",
+            "php",
+            "rest",
+            "sdk",
+            "sms",
+            "tfa"
+        ]
+    },
+    {
         "name": "maximebf/debugbar",
         "version": "v1.18.0",
         "version_normalized": "1.18.0.0",
@@ -677,7 +852,7 @@
         ]
     },
     {
-        "name": "mikey179/vfsStream",
+        "name": "mikey179/vfsstream",
         "version": "v1.1.0",
         "version_normalized": "1.1.0.0",
         "source": {
@@ -1351,8 +1526,8 @@
     },
     {
         "name": "symfony/polyfill-mbstring",
-        "version": "v1.24.0",
-        "version_normalized": "1.24.0.0",
+        "version": "v1.25.0",
+        "version_normalized": "1.25.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/polyfill-mbstring.git",
@@ -1419,23 +1594,23 @@
     },
     {
         "name": "symfony/polyfill-php80",
-        "version": "v1.24.0",
-        "version_normalized": "1.24.0.0",
+        "version": "v1.25.0",
+        "version_normalized": "1.25.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/polyfill-php80.git",
-            "reference": "57b712b08eddb97c762a8caa32c84e037892d2e9"
+            "reference": "4407588e0d3f1f52efb65fbe92babe41f37fe50c"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/polyfill-php80/zipball/57b712b08eddb97c762a8caa32c84e037892d2e9",
-            "reference": "57b712b08eddb97c762a8caa32c84e037892d2e9",
+            "url": "https://api.github.com/repos/symfony/polyfill-php80/zipball/4407588e0d3f1f52efb65fbe92babe41f37fe50c",
+            "reference": "4407588e0d3f1f52efb65fbe92babe41f37fe50c",
             "shasum": ""
         },
         "require": {
             "php": ">=7.1"
         },
-        "time": "2021-09-13T13:58:33+00:00",
+        "time": "2022-03-04T08:16:47+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -1487,17 +1662,17 @@
     },
     {
         "name": "symfony/var-dumper",
-        "version": "v5.4.3",
-        "version_normalized": "5.4.3.0",
+        "version": "v5.4.5",
+        "version_normalized": "5.4.5.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/var-dumper.git",
-            "reference": "970a01f208bf895c5f327ba40b72288da43adec4"
+            "reference": "6efddb1cf6af5270b21c48c6103e81f920c220f0"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/var-dumper/zipball/970a01f208bf895c5f327ba40b72288da43adec4",
-            "reference": "970a01f208bf895c5f327ba40b72288da43adec4",
+            "url": "https://api.github.com/repos/symfony/var-dumper/zipball/6efddb1cf6af5270b21c48c6103e81f920c220f0",
+            "reference": "6efddb1cf6af5270b21c48c6103e81f920c220f0",
             "shasum": ""
         },
         "require": {
@@ -1521,7 +1696,7 @@
             "ext-intl": "To show region name in time zone dump",
             "symfony/console": "To use the ServerDumpCommand and/or the bin/var-dump-server script"
         },
-        "time": "2022-01-17T16:30:37+00:00",
+        "time": "2022-02-21T15:00:19+00:00",
         "bin": [
             "Resources/bin/var-dump-server"
         ],

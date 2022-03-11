@@ -7,13 +7,17 @@ class Model_api_{table_name} extends MY_Model {
 private $primary_key 	= '{primary_key}';
 	private $table_name 	= '{table_name}';
 	private $field_search 	= ['<?= implode("', '", $field_in_column); ?>'];
+	private $user_restriction = '{user_restriction}';
+	private $user_restriction_columns = '{user_restriction_columns}';
 
 	public function __construct()
 	{
 		$config = array(
 			'primary_key' 	=> $this->primary_key,
 		 	'table_name' 	=> $this->table_name,
-		 	'field_search' 	=> $this->field_search,
+			'field_search' 	=> $this->field_search,
+			'user_restriction' => $this->user_restriction,
+			'user_restriction_columns' => $this->user_restriction_columns
 		 );
 
 		parent::__construct($config);
@@ -27,22 +31,34 @@ private $primary_key 	= '{primary_key}';
         $q = $this->scurity($q);
 		$field = $this->scurity($field);
 
-        if (empty($field)) {
-	        foreach ($this->field_search as $field) {
-	            if ($iterasi == 1) {
-	                $where .= $field . " LIKE '%" . $q . "%' ";
-	            } else {
-	                $where .= "OR " . $field . " LIKE '%" . $q . "%' ";
-	            }
-	            $iterasi++;
-	        }
+	if (empty($field)) {
+		if(!empty($q)) {
+		foreach ($this->field_search as $field) {
+		    if ($iterasi == 1) {
+			$where .= $field . " = '" . $q . "' ";
+		    } else {
+			$where .= "OR " . $field . " = '" . $q . "' ";
+		    }
+		    $iterasi++;
+		}
 
-	        $where = '('.$where.')';
+		$where = '('.$where.')';
+		}
         } else {
-        	$where .= "(" . $field . " LIKE '%" . $q . "%' )";
-        }
+        	$where .= "(" . $field . " = '" . $q . "' )";
+	}
 
-        $this->db->where($where);
+		if($this->apply_user_filter()) {
+                        if(!empty($where)) {
+                                $where .= " and ";
+                        }
+
+                        $where .= $this->get_user_filter_condition();
+                }
+
+	if(!empty($where)) {
+		$this->db->where($where);
+	}
 		$query = $this->db->get($this->table_name);
 
 		return $query->num_rows();
@@ -56,17 +72,19 @@ private $primary_key 	= '{primary_key}';
         $q = $this->scurity($q);
 		$field = $this->scurity($field);
 
-        if (empty($field)) {
-	        foreach ($this->field_search as $field) {
-	            if ($iterasi == 1) {
-	                $where .= $field . " LIKE '%" . $q . "%' ";
-	            } else {
-	                $where .= "OR " . $field . " LIKE '%" . $q . "%' ";
-	            }
-	            $iterasi++;
-	        }
+	if (empty($field)) {
+		if(!empty($q)) {
+		foreach ($this->field_search as $field) {
+		    if ($iterasi == 1) {
+			$where .= $field . " LIKE '%" . $q . "%' ";
+		    } else {
+			$where .= "OR " . $field . " LIKE '%" . $q . "%' ";
+		    }
+		    $iterasi++;
+		}
 
-	        $where = '('.$where.')';
+		$where = '('.$where.')';
+		}
         } else {
         	if (in_array($field, $select_field)) {
         		$where .= "(" . $field . " LIKE '%" . $q . "%' )";
@@ -75,7 +93,15 @@ private $primary_key 	= '{primary_key}';
 
         if (is_array($select_field) AND count($select_field)) {
         	$this->db->select($select_field);
-        }
+	}
+
+if($this->apply_user_filter()) {
+                        if(!empty($where)) {
+                                $where .= " and ";
+                        }
+
+                        $where .= $this->get_user_filter_condition();
+                }
 		
 		if ($where) {
         	$this->db->where($where);

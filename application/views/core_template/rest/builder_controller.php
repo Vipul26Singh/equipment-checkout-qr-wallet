@@ -12,6 +12,8 @@ class <?= ucfirst($table_name); ?> extends API
 		$this->load->model('model_api_{table_name}');
 	}
 
+	<?php if($has_read)  { ?>
+
 	/**
 	 * @api {get} /{table_name}/all Get all {table_name}s.
 	 * @apiVersion 0.1.0
@@ -149,7 +151,9 @@ class <?= ucfirst($table_name); ?> extends API
 			], API::HTTP_NOT_ACCEPTABLE);
 		}
 	}
+	<?php } ?>
 
+	<?php if($has_add) { ?>
 	
 	/**
 	 * @api {post} /{table_name}/add Add {table_name_uc_no_space}.
@@ -321,6 +325,10 @@ class <?= ucfirst($table_name); ?> extends API
 		}
 	}
 
+	<?php } ?>
+
+	<?php if($has_update) { ?>
+
 	/**
 	 * @api {post} /{table_name}/update Update {table_name_uc_no_space}.
 	 * @apiVersion 0.1.0
@@ -490,6 +498,10 @@ class <?= ucfirst($table_name); ?> extends API
 			], API::HTTP_NOT_ACCEPTABLE);
 		}
 	}
+
+	<?php } ?>
+
+	<?php if($has_delete) { ?>
 	
 	/**
 	 * @api {post} /{table_name}/delete Delete {table_name_uc_no_space}. 
@@ -553,6 +565,8 @@ class <?= ucfirst($table_name); ?> extends API
 			], API::HTTP_NOT_ACCEPTABLE);
 		}
 	}
+
+	<?php } ?>
 
 }
 

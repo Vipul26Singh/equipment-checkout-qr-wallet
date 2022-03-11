@@ -150,7 +150,15 @@ class Rest extends Admin
 				'primary_key'				=> $this->input->post('primary_key'),
 				'subject'					=> $this->input->post('subject'),
 				'non_input_able_validation' => $this->crud_builder->getNonInputableValidation(),
+				'has_add'			=> $this->input->post('has_add'),
+				'has_update'                       => $this->input->post('has_update'),
+				'has_all'                       => $this->input->post('has_read'),
+				'has_detail'                       => $this->input->post('has_read'),
+				'has_read'                       => $this->input->post('has_read'),
+				'has_delete'                       => $this->input->post('has_delete'),
 				'input_able_validation'		=> $this->crud_builder->getInputableValidation(),
+				'user_restriction'           => $this->input->post('user_restriction'),
+                                'user_restriction_columns'      => $this->input->post('user_restriction_columns'),
 				'show_in_add'				=> $this->crud_builder->getFieldShowInAddForm(),
 				'show_in_column'			=> $this->crud_builder->getFieldShowInColumn(),
 				'show_in_update'			=> $this->crud_builder->getFieldShowInUpdateForm(),
@@ -204,6 +212,12 @@ class Rest extends Admin
 				'subject' 				=> $this->input->post('subject'),
 				'x_api_key' 			=> $this->input->post('x_api_key') ? $this->input->post('x_api_key') : 'no',
 				'x_token' 				=> $this->input->post('x_token') ? $this->input->post('x_token') : 'no',
+				'has_read'                               => $this->input->post('has_read') ? $this->input->post('has_read') : '0',
+				'has_add'                               => $this->input->post('has_add') ? $this->input->post('has_add') : '0',
+				'has_update'                               => $this->input->post('has_update') ? $this->input->post('has_update') : '0',
+				'has_delete'                               => $this->input->post('has_delete') ? $this->input->post('has_delete') : '0',
+				'user_restriction'           => $this->input->post('user_restriction'),
+                                'user_restriction_columns'      => $this->input->post('user_restriction_columns'),
 			];
 
 			if ($id_rest = $this->model_rest->rest_exist($this->input->post('table_name'))) {

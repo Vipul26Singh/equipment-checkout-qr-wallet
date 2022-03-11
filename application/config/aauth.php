@@ -86,7 +86,8 @@ $config_aauth["default"] = array(
  'no_permission'                  => FALSE,
 
  'admin_group'                    => 'admin',
- 'default_group'                  => 'default',
+ 'superadmin_group'		=> 'superadmin',
+ 'default_group'                  => 'customer',
  'public_group'                   => 'public',
 
  'db_profile'                     => 'default',
@@ -104,7 +105,7 @@ $config_aauth["default"] = array(
 
  'remember'                       => ' +3 days',
 
- 'max'                            => 30,
+ 'max'                            => 60,
  'min'                            => 5,
 
  'additional_valid_chars'         => array(),

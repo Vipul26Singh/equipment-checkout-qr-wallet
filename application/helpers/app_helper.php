@@ -873,7 +873,8 @@ if(!function_exists('get_table_not_allowed_for_builder')) {
 			'cc_log',
 			'cc_block_client',
 			'cc_block',
-			'cc_visitor'
+			'cc_visitor',
+			'mobile_otp'
 		];
 	}
 }

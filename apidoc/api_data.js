@@ -1082,16 +1082,23 @@ define({ "api": [{
           {
             "group": "Parameter",
             "type": "String",
-            "optional": false,
+            "optional": true,
             "field": "Email",
-            "description": "<p>Mandatory email of Users.</p>"
+            "description": "<p>Mandatory email of Users if mobile is not given.</p>"
+          },
+	  {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "Mobile",
+            "description": "<p>Mandatory mobile of Users if email is not given.</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
             "field": "Password",
-            "description": "<p>Mandatory password of Users.</p>"
+            "description": "<p>Mandatory password of Users. Can be mpin, fingerprint, otp or password</p>"
           }
         ]
       }
@@ -1376,6 +1383,13 @@ define({ "api": [{
             "field": "Email",
             "description": "<p>Mandatory email of Users.</p>"
           },
+	  {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "mobile",
+            "description": "<p>Optional mobile of Users.</p>"
+          },
           {
             "group": "Parameter",
             "type": "String",
@@ -1405,6 +1419,497 @@ define({ "api": [{
             "optional": false,
             "field": "Id",
             "description": "<p>id of Users.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "Status",
+            "description": "<p>status response api.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "Message",
+            "description": "<p>message response api.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "ValidationError",
+            "description": "<p>Error validation.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Not Acceptable",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "application/controllers/api/User.php",
+    "groupTitle": "User"
+  },
+  {
+    "type": "post",
+    "url": "/user/verify_mpin",
+    "title": "Verify User Mpin.",
+    "version": "0.1.0",
+    "name": "VerifyMpinUser",
+    "group": "User",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-API-KEY",
+            "description": "<p>Users unique access-key.</p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-Token",
+            "description": "<p>Users unique token.</p>"
+          }
+        ]
+      }
+    },
+    "permission": [
+      {
+        "name": "Group Cant be Accessed permission name : user_profile"
+      }
+    ],
+   "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "mpin",
+            "description": "<p>Mandatory mpin of Users.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "Status",
+            "description": "<p>status response api.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "Message",
+            "description": "<p>message response api.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "ValidationError",
+            "description": "<p>Error validation.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Not Acceptable",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "application/controllers/api/User.php",
+    "groupTitle": "User"
+  },
+  {
+    "type": "post",
+    "url": "/user/update_mpin",
+    "title": "update User Mpin.",
+    "version": "0.1.0",
+    "name": "UpdateMpinUser",
+    "group": "User",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-API-KEY",
+            "description": "<p>Users unique access-key.</p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-Token",
+            "description": "<p>Users unique token.</p>"
+          }
+        ]
+      }
+    },
+    "permission": [
+      {
+        "name": "Group Cant be Accessed permission name : user_profile"
+      }
+    ],
+   "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "new_mpin",
+            "description": "<p>Mandatory new mpin of Users.</p>"
+          },
+	  {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "old_mpin",
+            "description": "<p>Mandatory old mpin of Users. Optional in case of first time registration.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "Status",
+            "description": "<p>status response api.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "Message",
+            "description": "<p>message response api.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "ValidationError",
+            "description": "<p>Error validation.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Not Acceptable",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "application/controllers/api/User.php",
+    "groupTitle": "User"
+  },
+  {
+    "type": "post",
+    "url": "/user/reset_mpin",
+    "title": "Reset User Mpin in case user forgot mpin.",
+    "version": "0.1.0",
+    "name": "ResetMpinUser",
+    "group": "User",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-API-KEY",
+            "description": "<p>Users unique access-key.</p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-Token",
+            "description": "<p>Users unique token.</p>"
+          }
+        ]
+      }
+    },
+    "permission": [
+      {
+        "name": "Group Cant be Accessed permission name : user_profile"
+      }
+    ],
+   "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "new_mpin",
+            "description": "<p>Mandatory new mpin of Users.</p>"
+          },
+	  {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "mobile_otp",
+            "description": "<p>Otp received on mobile number. Call generate otp before calling this one</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "Status",
+            "description": "<p>status response api.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "Message",
+            "description": "<p>message response api.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "ValidationError",
+            "description": "<p>Error validation.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Not Acceptable",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "application/controllers/api/User.php",
+    "groupTitle": "User"
+  },
+  {
+    "type": "post",
+    "url": "/user/verify_fingerprint",
+    "title": "Verify User Fingerprint.",
+    "version": "0.1.0",
+    "name": "VerifyFingerprintUser",
+    "group": "User",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-API-KEY",
+            "description": "<p>Users unique access-key.</p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-Token",
+            "description": "<p>Users unique token.</p>"
+          }
+        ]
+      }
+    },
+    "permission": [
+      {
+        "name": "Group Cant be Accessed permission name : user_profile"
+      }
+    ],
+   "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "fingerprint",
+            "description": "<p>Mandatory fingerprint of Users.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "Status",
+            "description": "<p>status response api.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "Message",
+            "description": "<p>message response api.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "ValidationError",
+            "description": "<p>Error validation.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Not Acceptable",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "application/controllers/api/User.php",
+    "groupTitle": "User"
+  },
+  {
+    "type": "post",
+    "url": "/user/update_fingerprint",
+    "title": "update User fingeprint.",
+    "version": "0.1.0",
+    "name": "UpdateFingerprintUser",
+    "group": "User",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-API-KEY",
+            "description": "<p>Users unique access-key.</p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-Token",
+            "description": "<p>Users unique token.</p>"
+          }
+        ]
+      }
+    },
+    "permission": [
+      {
+        "name": "Group Cant be Accessed permission name : user_profile"
+      }
+    ],
+   "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "new_fingerprint",
+            "description": "<p>Mandatory new fingerprint of Users.</p>"
+          },
+	 {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "old_fingerprint",
+            "description": "<p>Mandatory old fingerprint of Users. Optional in case fresh fingerprint</p>"
           }
         ]
       }
@@ -1499,6 +2004,13 @@ define({ "api": [{
             "optional": false,
             "field": "Email",
             "description": "<p>Mandatory email of Users.</p>"
+          },
+	  {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "mobile",
+            "description": "<p>Optional mobile of Users.</p>"
           },
           {
             "group": "Parameter",
@@ -2106,6 +2618,607 @@ define({ "api": [{
     "groupTitle": "Group"
   },{
     "type": "post",
+    "url": "/blog/add",
+    "title": "Add Blog.",
+    "version": "0.1.0",
+    "name": "Addblog",
+    "group": "blog",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-Api-Key",
+            "description": "<p>Blog unique access-key.</p>"
+          }
+          ,
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-Token",
+            "description": "<p>Blog unique token.</p>"
+          }
+                  ]
+      }
+    },
+    "permission": [
+      {
+        "name": "Blog Cant be Accessed permission name : api_blog_add"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+                    {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "Title",
+            "description": "<p>Mandatory title of Blogs Input Title Max Length : 200..</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "Content",
+            "description": "<p>Mandatory content of Blogs .</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "Image",
+            "description": "<p>Mandatory image of Blogs .</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "Category",
+            "description": "<p>Mandatory category of Blogs Input Category Max Length : 200..</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "Created_by",
+            "description": "<p>Mandatory created_by of Blogs Input Created By Max Length : 11..</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "Updated_by",
+            "description": "<p>Mandatory updated_by of Blogs Input Updated By Max Length : 11..</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "Updated_at",
+            "description": "<p>Mandatory updated_at of Blogs .</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "Created_at",
+            "description": "<p>Mandatory created_at of Blogs .</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "Status",
+            "description": "<p>status response api.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "Message",
+            "description": "<p>message response api.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "ValidationError",
+            "description": "<p>Error validation.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Not Acceptable",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "application/controllers/api/Blog.php",
+    "groupTitle": "Blog"
+  }
+,  {
+    "type": "get",
+    "url": "/blog/all",
+    "title": "Get all Blogs.",
+    "version": "0.1.0",
+    "name": "Allblog",
+    "group": "blog",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-Api-Key",
+            "description": "<p>Blogs unique access-key.</p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-Token",
+            "description": "<p>Blogs unique token.</p>"
+          }
+        ]
+      }
+    },
+    "permission": [
+      {
+        "name": "{} Cant be Accessed permission name : api_Blog_all"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+         
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "Field",
+            "defaultValue": "All Field",
+            "description": "<p>Optional field of Blogs.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "Start",
+            "defaultValue": "0",
+            "description": "<p>Optional start index of Blogs.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "Limit",
+            "defaultValue": "10",
+            "description": "<p>Optional limit data of Blogs.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "Status",
+            "description": "<p>status response api.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "Message",
+            "description": "<p>message response api.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Array",
+            "optional": false,
+            "field": "Data",
+            "description": "<p>data of Blog.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "NoDataBlog",
+            "description": "<p>Blog data is nothing.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Not Acceptable",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "application/controllers/api/Blog.php",
+    "groupTitle": "Blog"
+  }
+,  {
+    "type": "post",
+    "url": "/Blog/delete",
+    "title": "Delete Blog.",
+    "version": "0.1.0",
+    "name": "Deleteblog",
+    "group": "blog",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-Api-Key",
+            "description": "<p>Blogs unique access-key.</p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-Token",
+            "description": "<p>Blogs unique token.</p>"
+          }
+        ]
+      }
+    },
+    "permission": [
+      {
+        "name": "Blog Cant be Accessed permission name : api_Blog_delete"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "Id",
+            "description": "<p>Mandatory id of Blogs .</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "Status",
+            "description": "<p>status response api.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "Message",
+            "description": "<p>message response api.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "ValidationError",
+            "description": "<p>Error validation.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Not Acceptable",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "application/controllers/api/Blog.php",
+    "groupTitle": "Blog"
+  }
+,  {
+    "type": "get",
+    "url": "/Blog/detail",
+    "title": "Detail Blog.",
+    "version": "0.1.0",
+    "name": "Detailblog",
+    "group": "blog",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-Api-Key",
+            "description": "<p>Blogs unique access-key.</p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-Token",
+            "description": "<p>Blogs unique token.</p>"
+          }
+        ]
+      }
+    },
+    "permission": [
+      {
+        "name": "Blog Cant be Accessed permission name : api_Blog_detail"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "Id",
+            "description": "<p>Mandatory id of Blogs.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "Status",
+            "description": "<p>status response api.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "Message",
+            "description": "<p>message response api.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Array",
+            "optional": false,
+            "field": "Data",
+            "description": "<p>data of Blog.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "BlogNotFound",
+            "description": "<p>Blog data is not found.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Not Acceptable",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "application/controllers/api/Blog.php",
+    "groupTitle": "Blog"
+  }
+,  {
+    "type": "post",
+    "url": "/Blog/update",
+    "title": "Update Blog.",
+    "version": "0.1.0",
+    "name": "Updateblog",
+    "group": "blog",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-Api-Key",
+            "description": "<p>Blogs unique access-key.</p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-Token",
+            "description": "<p>Blogs unique token.</p>"
+          }
+        ]
+      }
+    },
+    "permission": [
+      {
+        "name": "Blog Cant be Accessed permission name : api_Blog_update"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+                    {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "Title",
+            "description": "<p>Mandatory title of Blogs Input Title Max Length : 200..</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "Content",
+            "description": "<p>Mandatory content of Blogs .</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "Image",
+            "description": "<p>Mandatory image of Blogs .</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "Category",
+            "description": "<p>Mandatory category of Blogs Input Category Max Length : 200..</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "Created_by",
+            "description": "<p>Mandatory created_by of Blogs Input Created By Max Length : 11..</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "Updated_by",
+            "description": "<p>Mandatory updated_by of Blogs Input Updated By Max Length : 11..</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "Updated_at",
+            "description": "<p>Mandatory updated_at of Blogs .</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "Created_at",
+            "description": "<p>Mandatory created_at of Blogs .</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "Status",
+            "description": "<p>status response api.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "Message",
+            "description": "<p>message response api.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "ValidationError",
+            "description": "<p>Error validation.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Not Acceptable",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "application/controllers/api/Blog.php",
+    "groupTitle": "Blog"
+  }
+,{
+    "type": "post",
     "url": "/mobile_otp/add",
     "title": "Add Mobile otp.",
     "version": "0.1.0",
@@ -2192,130 +3305,11 @@ define({ "api": [{
     "groupTitle": "Mobile otp"
   },
   {
-    "type": "get",
-    "url": "/mobile_otp/all",
-    "title": "Get all Mobile otps.",
-    "version": "0.1.0",
-    "name": "Allmobile_otp",
-    "group": "mobile_otp",
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "X-Api-Key",
-            "description": "<p>Mobile otps unique access-key.</p>"
-          },
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "X-Token",
-            "description": "<p>Mobile otps unique token.</p>"
-          }
-        ]
-      }
-    },
-    "permission": [
-      {
-        "name": "{} Cant be Accessed permission name : api_Mobile otp_all"
-      }
-    ],
-    "parameter": {
-      "fields": {
-        "Parameter": [
-         
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "Field",
-            "defaultValue": "All Field",
-            "description": "<p>Optional field of Mobile otps.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "Start",
-            "defaultValue": "0",
-            "description": "<p>Optional start index of Mobile otps.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "Limit",
-            "defaultValue": "10",
-            "description": "<p>Optional limit data of Mobile otps.</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "Status",
-            "description": "<p>status response api.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "Message",
-            "description": "<p>message response api.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Array",
-            "optional": false,
-            "field": "Data",
-            "description": "<p>data of Mobile otp.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "NoDataMobile otp",
-            "description": "<p>Mobile otp data is nothing.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Acceptable",
-          "type": "json"
-        }
-      ]
-    },
-    "filename": "application/controllers/api/Mobile otp.php",
-    "groupTitle": "Mobile otp"
-  },
-  {
     "type": "post",
-    "url": "/Mobile otp/delete",
-    "title": "Delete Mobile otp.",
+    "url": "/mobile_otp/verify",
+    "title": "Verify Mobile otp.",
     "version": "0.1.0",
-    "name": "Deletemobile_otp",
+    "name": "Verifymobile_otp",
     "group": "mobile_otp",
     "header": {
       "fields": {
@@ -2325,217 +3319,14 @@ define({ "api": [{
             "type": "String",
             "optional": false,
             "field": "X-Api-Key",
-            "description": "<p>Mobile otps unique access-key.</p>"
-          },
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "X-Token",
-            "description": "<p>Mobile otps unique token.</p>"
+            "description": "<p>Mobile otp unique access-key.</p>"
           }
-        ]
+                  ]
       }
     },
     "permission": [
       {
-        "name": "Mobile otp Cant be Accessed permission name : api_Mobile otp_delete"
-      }
-    ],
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Integer",
-            "optional": false,
-            "field": "Id",
-            "description": "<p>Mandatory id of Mobile otps .</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "Status",
-            "description": "<p>status response api.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "Message",
-            "description": "<p>message response api.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "ValidationError",
-            "description": "<p>Error validation.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Acceptable",
-          "type": "json"
-        }
-      ]
-    },
-    "filename": "application/controllers/api/Mobile otp.php",
-    "groupTitle": "Mobile otp"
-  },
-  {
-    "type": "get",
-    "url": "/Mobile otp/detail",
-    "title": "Detail Mobile otp.",
-    "version": "0.1.0",
-    "name": "Detailmobile_otp",
-    "group": "mobile_otp",
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "X-Api-Key",
-            "description": "<p>Mobile otps unique access-key.</p>"
-          },
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "X-Token",
-            "description": "<p>Mobile otps unique token.</p>"
-          }
-        ]
-      }
-    },
-    "permission": [
-      {
-        "name": "Mobile otp Cant be Accessed permission name : api_Mobile otp_detail"
-      }
-    ],
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Integer",
-            "optional": false,
-            "field": "Id",
-            "description": "<p>Mandatory id of Mobile otps.</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "Status",
-            "description": "<p>status response api.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "Message",
-            "description": "<p>message response api.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Array",
-            "optional": false,
-            "field": "Data",
-            "description": "<p>data of Mobile otp.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "Mobile otpNotFound",
-            "description": "<p>Mobile otp data is not found.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Acceptable",
-          "type": "json"
-        }
-      ]
-    },
-    "filename": "application/controllers/api/Mobile otp.php",
-    "groupTitle": "Mobile otp"
-  }
-,
-  {
-    "type": "post",
-    "url": "/Mobile otp/update",
-    "title": "Update Mobile otp.",
-    "version": "0.1.0",
-    "name": "Updatemobile_otp",
-    "group": "mobile_otp",
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "X-Api-Key",
-            "description": "<p>Mobile otps unique access-key.</p>"
-          },
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "X-Token",
-            "description": "<p>Mobile otps unique token.</p>"
-          }
-        ]
-      }
-    },
-    "permission": [
-      {
-        "name": "Mobile otp Cant be Accessed permission name : api_Mobile otp_update"
+        "name": "Mobile otp Cant be Accessed permission name : api_mobile_otp_add"
       }
     ],
     "parameter": {
@@ -2547,6 +3338,13 @@ define({ "api": [{
             "optional": false,
             "field": "Mobile_no",
             "description": "<p>Mandatory mobile_no of Mobile otps Input Mobile No Max Length : 20..</p>"
+          },
+	  {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "otp",
+            "description": "<p>Mandatory otp of Mobile otps Input Mobile No Max Length : 20..</p>"
           }
         ]
       }
@@ -2597,7 +3395,8 @@ define({ "api": [{
         }
       ]
     },
-    "filename": "application/controllers/api/Mobile otp.php",
+    "filename": "application/controllers/api/Mobile_otp.php",
     "groupTitle": "Mobile otp"
   }
+
 ] });

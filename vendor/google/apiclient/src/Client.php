@@ -792,8 +792,6 @@ class Client
    */
   public function verifyIdToken($idToken = null)
   {
-
-
     $tokenVerifier = new Verify(
         $this->getHttpClient(),
         $this->getCache(),
@@ -809,7 +807,6 @@ class Client
       }
       $idToken = $token['id_token'];
     }
-
 
     return $tokenVerifier->verifyIdToken(
         $idToken,
@@ -1209,7 +1206,6 @@ class Client
     } else {
       throw new LogicException('Could not find supported version of Guzzle.');
     }
-
 
     return new GuzzleClient($options);
   }

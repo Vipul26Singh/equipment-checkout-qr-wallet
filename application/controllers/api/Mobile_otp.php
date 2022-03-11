@@ -5,114 +5,15 @@ use \Firebase\JWT\JWT;
 
 class Mobile_otp extends API
 {
-	
+
 	public function __construct()
 	{
 		parent::__construct();
 		$this->load->model('model_api_mobile_otp');
 	}
 
-	/**
-	 * @api {get} /mobile_otp/all Get all mobile_otps.
-	 * @apiVersion 0.1.0
-	 * @apiName AllMobileotp 
-	 * @apiGroup mobile_otp
-	 * @apiHeader {String} X-Api-Key Mobile otps unique access-key.
-	 * @apiPermission Mobile otp Cant be Accessed permission name : api_mobile_otp_all
-	 *
-	 * @apiParam {String} [Filter=null] Optional filter of Mobile otps.
-	 * @apiParam {String} [Field="All Field"] Optional field of Mobile otps : .
-	 * @apiParam {String} [Start=0] Optional start index of Mobile otps.
-	 * @apiParam {String} [Limit=10] Optional limit data of Mobile otps.
-	 *
-	 *
-	 * @apiSuccess {Boolean} Status status response api.
-	 * @apiSuccess {String} Message message response api.
-	 * @apiSuccess {Array} Data data of mobile_otp.
-	 *
-	 * @apiSuccessExample Success-Response:
-	 *     HTTP/1.1 200 OK
-	 *
-	 * @apiError NoDataMobile otp Mobile otp data is nothing.
-	 *
-	 * @apiErrorExample Error-Response:
-	 *     HTTP/1.1 403 Not Acceptable
-	 *
-	 */
-	public function all_get()
-	{
-		$this->is_allowed('api_mobile_otp_all', false);
 
-		$filter = $this->get('filter');
-		$field = $this->get('field');
-		$limit = $this->get('limit') ? $this->get('limit') : $this->limit_page;
-		$start = $this->get('start');
 
-		$select_field = [''];
-		$mobile_otps = $this->model_api_mobile_otp->get($filter, $field, $limit, $start, $select_field);
-		$total = $this->model_api_mobile_otp->count_all($filter, $field);
-
-		$data['mobile_otp'] = $mobile_otps;
-				
-		$this->response([
-			'status' 	=> true,
-			'message' 	=> 'Data Mobile otp',
-			'data'	 	=> $data,
-			'total' 	=> $total
-		], API::HTTP_OK);
-	}
-
-	
-	/**
-	 * @api {get} /mobile_otp/detail Detail Mobile otp.
-	 * @apiVersion 0.1.0
-	 * @apiName DetailMobile otp
-	 * @apiGroup mobile_otp
-	 * @apiHeader {String} X-Api-Key Mobile otps unique access-key.
-	 * @apiPermission Mobile otp Cant be Accessed permission name : api_mobile_otp_detail
-	 *
-	 * @apiParam {Integer} Id Mandatory id of Mobile otps.
-	 *
-	 * @apiSuccess {Boolean} Status status response api.
-	 * @apiSuccess {String} Message message response api.
-	 * @apiSuccess {Array} Data data of mobile_otp.
-	 *
-	 * @apiSuccessExample Success-Response:
-	 *     HTTP/1.1 200 OK
-	 *
-	 * @apiError Mobile otpNotFound Mobile otp data is not found.
-	 *
-	 * @apiErrorExample Error-Response:
-	 *     HTTP/1.1 403 Not Acceptable
-	 *
-	 */
-	public function detail_get()
-	{
-		$this->is_allowed('api_mobile_otp_detail', false);
-
-		$this->requiredInput(['id']);
-
-		$id = $this->get('id');
-
-		$select_field = [''];
-		$data['mobile_otp'] = $this->model_api_mobile_otp->find($id, $select_field);
-
-		if ($data['mobile_otp']) {
-			
-			$this->response([
-				'status' 	=> true,
-				'message' 	=> 'Detail Mobile otp',
-				'data'	 	=> $data
-			], API::HTTP_OK);
-		} else {
-			$this->response([
-				'status' 	=> true,
-				'message' 	=> 'Mobile otp not found'
-			], API::HTTP_NOT_ACCEPTABLE);
-		}
-	}
-
-	
 	/**
 	 * @api {post} /mobile_otp/add Add Mobile otp.
 	 * @apiVersion 0.1.0
@@ -121,7 +22,7 @@ class Mobile_otp extends API
 	 * @apiHeader {String} X-Api-Key Mobile otps unique access-key.
 	 * @apiPermission Mobile otp Cant be Accessed permission name : api_mobile_otp_add
 	 *
- 	 * @apiParam {String} Mobile_no Mandatory mobile_no of Mobile otps. Input Mobile No Max Length : 20. 
+	 * @apiParam {String} Mobile_no Mandatory mobile_no of Mobile otps. Input Mobile No Max Length : 20. 
 	 *
 	 * @apiSuccess {Boolean} Status status response api.
 	 * @apiSuccess {String} Message message response api.
@@ -140,16 +41,37 @@ class Mobile_otp extends API
 		$this->is_allowed('api_mobile_otp_add', false);
 
 		$this->form_validation->set_rules('mobile_no', 'Mobile No', 'trim|required|max_length[20]');
-		
+
 		if ($this->form_validation->run()) {
+			$otp_length = get_option('otp_length');
+			$otp_length = (int)$otp_length - 1;
+
+			$min_otp = pow(10, $otp_length);
+			$max_otp = $min_otp * 10 - 1;
+			$otp = mt_rand($min_otp, $max_otp);
 
 			$save_data = [
 				'mobile_no' => $this->input->post('mobile_no'),
+				'otp' => $otp
 			];
-			
+
+			$this->model_api_mobile_otp->delete_expired($save_data['mobile_no']);
+
 			$save_mobile_otp = $this->model_api_mobile_otp->store($save_data);
 
 			if ($save_mobile_otp) {
+				$this->load->library('sms');
+				try {
+					$this->sms->send_otp($save_data['mobile_no'], $otp);
+				} catch (Exception $e) {
+					log_message('error', 'OTP gateway error');
+					log_message('error', $e->getMessage());
+					$this->response([
+						'status'        => false,
+						'message'       => 'Unable to send OTP'
+					], API::HTTP_NOT_ACCEPTABLE);
+				}
+
 				$this->response([
 					'status' 	=> true,
 					'message' 	=> 'Your data has been successfully stored into the database'
@@ -171,14 +93,15 @@ class Mobile_otp extends API
 	}
 
 	/**
-	 * @api {post} /mobile_otp/update Update Mobile otp.
+	 * @api {post} /mobile_otp/verify Verify Mobile otp.
 	 * @apiVersion 0.1.0
-	 * @apiName UpdateMobile otp
+	 * @apiName VerifyMobile otp
 	 * @apiGroup mobile_otp
 	 * @apiHeader {String} X-Api-Key Mobile otps unique access-key.
-	 * @apiPermission Mobile otp Cant be Accessed permission name : api_mobile_otp_update
+	 * @apiPermission Mobile otp Cant be Accessed permission name : api_mobile_otp_add
 	 *
-	 * @apiParam {Integer} id Mandatory id of Mobile Otp.
+	 * @apiParam {String} Mobile_no Mandatory mobile_no of Mobile otps. Input Mobile No Max Length : 20.
+	 * @apiParam {String} Otp Mandatory otp of Mobile otps. Input Mobile No Max Length : 20.
 	 *
 	 * @apiSuccess {Boolean} Status status response api.
 	 * @apiSuccess {String} Message message response api.
@@ -192,29 +115,30 @@ class Mobile_otp extends API
 	 *     HTTP/1.1 403 Not Acceptable
 	 *
 	 */
-	public function update_post()
+	public function verify_post()
 	{
-		$this->is_allowed('api_mobile_otp_update', false);
+		$this->is_allowed('api_mobile_otp_add', false);
 
-		
-		
+		$this->form_validation->set_rules('mobile_no', 'Mobile No', 'trim|required|max_length[20]');
+		$this->form_validation->set_rules('otp', 'Otp', 'trim|required|max_length[20]');
+
 		if ($this->form_validation->run()) {
 
-			$save_data = [
-			];
-			
-			$save_mobile_otp = $this->model_api_mobile_otp->change($this->post('id'), $save_data);
+			$mobile_verified = $this->model_api_mobile_otp->verify_otp($this->input->post('mobile_no'), $this->input->post('otp'));
 
-			if ($save_mobile_otp) {
+
+			if ($mobile_verified) {
+				$this->load->library('sms');
+
 				$this->response([
 					'status' 	=> true,
-					'message' 	=> 'Your data has been successfully updated into the database'
+					'message' 	=> 'Otp and mobile verified'
 				], API::HTTP_OK);
 
 			} else {
 				$this->response([
 					'status' 	=> false,
-					'message' 	=> cclang('data_not_change')
+					'message' 	=> 'Mobile not verified'
 				], API::HTTP_NOT_ACCEPTABLE);
 			}
 
@@ -225,58 +149,6 @@ class Mobile_otp extends API
 			], API::HTTP_NOT_ACCEPTABLE);
 		}
 	}
-	
-	/**
-	 * @api {post} /mobile_otp/delete Delete Mobile otp. 
-	 * @apiVersion 0.1.0
-	 * @apiName DeleteMobile otp
-	 * @apiGroup mobile_otp
-	 * @apiHeader {String} X-Api-Key Mobile otps unique access-key.
-	 	 * @apiPermission Mobile otp Cant be Accessed permission name : api_mobile_otp_delete
-	 *
-	 * @apiParam {Integer} Id Mandatory id of Mobile otps .
-	 *
-	 * @apiSuccess {Boolean} Status status response api.
-	 * @apiSuccess {String} Message message response api.
-	 *
-	 * @apiSuccessExample Success-Response:
-	 *     HTTP/1.1 200 OK
-	 *
-	 * @apiError ValidationError Error validation.
-	 *
-	 * @apiErrorExample Error-Response:
-	 *     HTTP/1.1 403 Not Acceptable
-	 *
-	 */
-	public function delete_post()
-	{
-		$this->is_allowed('api_mobile_otp_delete', false);
-
-		$mobile_otp = $this->model_api_mobile_otp->find($this->post('id'));
-
-		if (!$mobile_otp) {
-			$this->response([
-				'status' 	=> false,
-				'message' 	=> 'Mobile otp not found'
-			], API::HTTP_NOT_ACCEPTABLE);
-		} else {
-			$delete = $this->model_api_mobile_otp->remove($this->post('id'));
-
-			}
-		
-		if ($delete) {
-			$this->response([
-				'status' 	=> true,
-				'message' 	=> 'Mobile otp deleted',
-			], API::HTTP_OK);
-		} else {
-			$this->response([
-				'status' 	=> false,
-				'message' 	=> 'Mobile otp not delete'
-			], API::HTTP_NOT_ACCEPTABLE);
-		}
-	}
-
 }
 
 /* End of file Mobile otp.php */
