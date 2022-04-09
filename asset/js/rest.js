@@ -68,16 +68,58 @@ $(document).ready(function(){
 		updateValidation($(this));
 
 		var relation = $(this).find('option:selected').attr('relation');
+		var custom_value = $(this).find('option:selected').attr('custom-value');
 		var table_relation = $(this).parents('td').find('.relation_table');
+		var custom_option_container = $(this).parents('td').find('.custom-option-container');
+
 
 		if (relation == 1) {
+
 			table_relation.val('').trigger('chosen:updated').parents('.form-group').show();
 
 		} else {
 			$(this).parents('td').find('.relation_field').parents('.form-group').hide();
+                        $(this).parents('td').find('.relation_field').val('');
 		}
 
+		if (custom_value == 1) {
+                        custom_option_container.show();
+
+                } else {
+                        custom_option_container.hide();
+                }
+
 	});
+
+
+	       $(document).on('change', 'table tr .relation_table', function(){
+                var relation_value = $(this).parents('td').find('.relation_value');
+                var table_name = $(this).val();
+
+                relation_value.parents('.form-group').show();
+
+                $.get(BASE_URL + '/administrator/crud/get_list_field_id/' + table_name, function(data) {
+                        var res = $.parseJSON(data);
+
+                        if(res.success) {
+                                relation_value.html(res.html);
+                                relation_value.trigger('chosen:updated');
+
+                        } else {
+                                $('.message').printMessage({message : res.message, type : 'warning'});
+                                $('.message').fadeIn();
+                        }
+                }).fail(function() {
+                        $('.message').printMessage({message : 'Error getting data', type : 'warning'});
+                })
+                .always(function() {
+                        $('.loading').hide();
+                });
+
+
+
+        });
+
 	
     $('#btn_cancel').click(function(){
     	swal({

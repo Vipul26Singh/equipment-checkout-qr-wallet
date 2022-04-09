@@ -128,11 +128,34 @@ function goBack() {
                             <i class="required">*</i>
                             </label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" name="category" id="category" placeholder="Category" value="<?= set_value('category', $blog->category); ?>">
+                                <select  class="form-control chosen chosen-select-deselect" name="category" id="category" data-placeholder="Select Category" >
+                                    <option value=""></option>
+                                    <?php foreach (db_get_all_data('blog_category') as $row): ?>
+                                    <option <?=  $row->category_id ==  $blog->category ? 'selected' : ''; ?> value="<?= $row->category_id ?>"><?= $row->category_name; ?></option>
+                                    <?php endforeach; ?>  
+                                </select>
                                 <small class="info help-block">
                                 <b>Input Category</b> Max Length : 200.</small>
                             </div>
                         </div>
+
+                                                 
+                                                <div class="form-group ">
+                            <label for="created_by" class="col-sm-2 control-label">Created By 
+                            <i class="required">*</i>
+                            </label>
+                            <div class="col-sm-8">
+                                <select  class="form-control chosen chosen-select-deselect" name="created_by" id="created_by" data-placeholder="Select Created By" >
+                                    <option value=""></option>
+                                    <?php foreach (db_get_all_data('aauth_users') as $row): ?>
+                                    <option <?=  $row->id ==  $blog->created_by ? 'selected' : ''; ?> value="<?= $row->id ?>"><?= $row->email; ?></option>
+                                    <?php endforeach; ?>  
+                                </select>
+                                <small class="info help-block">
+                                <b>Input Created By</b> Max Length : 11.</small>
+                            </div>
+                        </div>
+
                                                 
                         <div class="message"></div>
                         <div class="row-fluid col-md-7">

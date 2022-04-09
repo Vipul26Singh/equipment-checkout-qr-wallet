@@ -176,7 +176,8 @@ $(document).ready(function() {
         $('.message').hide();
 
         var form_rest = $('#form_rest');
-        var data_post = form_rest.serializeArray();
+	var data_post = form_rest.serializeArray();
+	console.log(data_post);
         var save_type = $(this).attr('data-stype');
 
         data_post.push({

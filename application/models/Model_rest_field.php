@@ -5,15 +5,15 @@ class Model_rest_field extends MY_Model {
 
 	private $primary_key 	= 'id';
 	private $table_name 	= 'rest_field';
-	private $field_search 	= ['rest_id', 'field_name', 'input_type', 'show_column', 'show_add_api', 'show_update_api', 'show_detail_api'];
+	private $field_search 	= ['rest_id', 'field_name', 'input_type', 'show_column', 'show_add_api', 'show_update_api', 'show_detail_api', 'relation_table', 'relation_value', 'field_filterable', 'field_filterable_type'];
 
 	public function __construct()
 	{
 		$config = array(
 			'primary_key' 	=> $this->primary_key,
-		 	'table_name' 	=> $this->table_name,
-		 	'field_search' 	=> $this->field_search,
-		 );
+			'table_name' 	=> $this->table_name,
+			'field_search' 	=> $this->field_search,
+		);
 
 		parent::__construct($config);
 	}
@@ -21,27 +21,27 @@ class Model_rest_field extends MY_Model {
 	public function count_all($q = null, $field = null)
 	{
 		$iterasi = 1;
-        $num = count($this->field_search);
-        $where = NULL;
-        $q = $this->scurity($q);
+		$num = count($this->field_search);
+		$where = NULL;
+		$q = $this->scurity($q);
 		$field = $this->scurity($field);
 
-        if (empty($field)) {
-	        foreach ($this->field_search as $field) {
-	            if ($iterasi == 1) {
-	                $where .= $field . " LIKE '%" . $q . "%' ";
-	            } else {
-	                $where .= "OR " . $field . " LIKE '%" . $q . "%' ";
-	            }
-	            $iterasi++;
-	        }
+		if (empty($field)) {
+			foreach ($this->field_search as $field) {
+				if ($iterasi == 1) {
+					$where .= $field . " LIKE '%" . $q . "%' ";
+				} else {
+					$where .= "OR " . $field . " LIKE '%" . $q . "%' ";
+				}
+				$iterasi++;
+			}
 
-	        $where = '('.$where.')';
-        } else {
-        	$where .= "(" . $field . " LIKE '%" . $q . "%' )";
-        }
+			$where = '('.$where.')';
+		} else {
+			$where .= "(" . $field . " LIKE '%" . $q . "%' )";
+		}
 
-        $this->db->where($where);
+		$this->db->where($where);
 		$query = $this->db->get($this->table_name);
 
 		return $query->num_rows();
@@ -50,33 +50,33 @@ class Model_rest_field extends MY_Model {
 	public function get($q = null, $field = null, $limit = 0, $offset = 0, $select_field = [])
 	{
 		$iterasi = 1;
-        $num = count($this->field_search);
-        $where = NULL;
-        $q = $this->scurity($q);
+		$num = count($this->field_search);
+		$where = NULL;
+		$q = $this->scurity($q);
 		$field = $this->scurity($field);
 
-        if (empty($field)) {
-	        foreach ($this->field_search as $field) {
-	            if ($iterasi == 1) {
-	                $where .= $field . " LIKE '%" . $q . "%' ";
-	            } else {
-	                $where .= "OR " . $field . " LIKE '%" . $q . "%' ";
-	            }
-	            $iterasi++;
-	        }
+		if (empty($field)) {
+			foreach ($this->field_search as $field) {
+				if ($iterasi == 1) {
+					$where .= $field . " LIKE '%" . $q . "%' ";
+				} else {
+					$where .= "OR " . $field . " LIKE '%" . $q . "%' ";
+				}
+				$iterasi++;
+			}
 
-	        $where = '('.$where.')';
-        } else {
-        	$where .= "(" . $field . " LIKE '%" . $q . "%' )";
-        }
+			$where = '('.$where.')';
+		} else {
+			$where .= "(" . $field . " LIKE '%" . $q . "%' )";
+		}
 
-        if (is_array($select_field) AND count($select_field)) {
-        	$this->db->select($select_field);
-        }
+		if (is_array($select_field) AND count($select_field)) {
+			$this->db->select($select_field);
+		}
 
-        $this->db->where($where);
-        $this->db->limit($limit, $offset);
-        $this->db->order_by($this->primary_key, "DESC");
+		$this->db->where($where);
+		$this->db->limit($limit, $offset);
+		$this->db->order_by($this->primary_key, "DESC");
 		$query = $this->db->get($this->table_name);
 
 		return $query->result();

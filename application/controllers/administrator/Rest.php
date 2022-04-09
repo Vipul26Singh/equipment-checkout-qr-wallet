@@ -187,6 +187,8 @@ class Rest extends Admin
 				exit;
 			}
 
+			$this->data['model_relations'] = $this->crud_builder->getFieldRelation();
+
 			$template_rest_path = 'core_template/rest/';
 
 			$builder_list = $this->parser->parse($template_rest_path.'builder_controller', $this->data, true);
@@ -237,6 +239,10 @@ class Rest extends Admin
 				$show_in_add_form = isset($val[$field_name]['show_in_add_form']) ? $val[$field_name]['show_in_add_form'] : '';
 				$show_in_update_form = isset($val[$field_name]['show_in_update_form']) ? $val[$field_name]['show_in_update_form'] : '';
 				$show_in_detail_page = isset($val[$field_name]['show_in_detail_page']) ? $val[$field_name]['show_in_detail_page'] : '';
+				$relation_table = isset($val[$field_name]['relation_table']) ? $val[$field_name]['relation_table'] : '';
+				$relation_value = isset($val[$field_name]['relation_value']) ? $val[$field_name]['relation_value'] : '';
+				$field_filterable = isset($val[$field_name]['field_filterable']) ? $val[$field_name]['field_filterable'] : 'no';
+				$field_filterable_type = isset($val[$field_name]['field_filterable_type']) ? $val[$field_name]['field_filterable_type'] : 'equals';
 
 				$save_data_field = [
 					'rest_id' 				=> $id_rest,
@@ -246,6 +252,10 @@ class Rest extends Admin
 					'show_add_api' 			=> $show_in_add_form,
 					'show_update_api' 		=> $show_in_update_form,
 					'show_detail_api' 		=> $show_in_detail_page,
+					'relation_table'		=> $relation_table,
+					'relation_value'		=> $relation_value,
+					'field_filterable'		=> $field_filterable,
+					'field_filterable_type'              => $field_filterable_type
 				];
 
 				$this->db->insert('rest_field', $save_data_field);

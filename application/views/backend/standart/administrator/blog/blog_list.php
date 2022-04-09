@@ -107,11 +107,29 @@ function goBack() {
 									</div>
 									</div>
 									</div>
-																																																					<div class="col-sm-6">
-                                                			<div class="form-group ">
-									<label class="col-sm-4 control-label">Category</label>
-                                                        		<div class="col-sm-8">
-									<input type="text" class="form-control" name="category" value="<?= !empty($_GET['category']) ? $_GET['category']:' ' ?>"></input>
+																																												                                                                        <div class="col-sm-6">
+                                                                        <div class="form-group ">
+                                                                        <label class="col-sm-4 control-label">Category</label>
+                                                                        <div class="col-sm-8">
+									<select  class="form-control chosen chosen-select-deselect" name="category"  data-placeholder="Select Category" >
+                                    						<option value=""></option>
+                                    						<?php foreach (db_get_all_data('blog_category') as $row): ?>
+                                    						<option <?= !empty($_GET['category']) && $_GET['category'] == "{$row->category_id}" ? 'selected':' ' ?> value="<?= $row->category_id ?>"><?= $row->category_name; ?></option>
+                                    						<?php endforeach; ?>
+                                					</select>
+									</div>
+									</div>
+									</div>
+																				                                                                        <div class="col-sm-6">
+                                                                        <div class="form-group ">
+                                                                        <label class="col-sm-4 control-label">Created By</label>
+                                                                        <div class="col-sm-8">
+									<select  class="form-control chosen chosen-select-deselect" name="created_by"  data-placeholder="Select Created By" >
+                                    						<option value=""></option>
+                                    						<?php foreach (db_get_all_data('aauth_users') as $row): ?>
+                                    						<option <?= !empty($_GET['created_by']) && $_GET['created_by'] == "{$row->id}" ? 'selected':' ' ?> value="<?= $row->id ?>"><?= $row->email; ?></option>
+                                    						<?php endforeach; ?>
+                                					</select>
 									</div>
 									</div>
 									</div>
@@ -160,6 +178,7 @@ function goBack() {
 			   <th>Content</th>
 			   <th>Image</th>
 			   <th>Category</th>
+			   <th>Created By</th>
 			   								<th>Action</th>
 				                        </tr>
                      </thead>
@@ -187,7 +206,10 @@ function goBack() {
                               <?php endif; ?>
                            </td>
                             
-                           <td><?= _ent($blog->category); ?></td> 
+                           <td><a style="text-decoration: underline;" class="label-default" href='<?= site_url("administrator/blog_category/view/{$blog->tab_category_value }"); ?>'> <?= _ent($blog->tab_category_label); ?> </a> </td>
+                             
+                           <td><a style="text-decoration: underline;" class="label-default" href='<?= site_url("administrator/aauth_users/view/{$blog->tab_created_by_value }"); ?>'> <?= _ent($blog->tab_created_by_label); ?> </a> </td>
+                             
                            						<td width="200">
                               <?php is_allowed('blog_view', function() use ($blog){?>
                               <a href="<?= site_url('administrator/blog/view/' . $blog->id); ?>" class="label-default"><i class="fa fa-newspaper-o"></i> <?= cclang('view_button'); ?>

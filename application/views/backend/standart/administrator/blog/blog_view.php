@@ -126,7 +126,19 @@ function goBack() {
                         <label for="content" class="col-sm-2">Category </label>
 
                         <div class="col-sm-8">
-                           <?= _ent($blog->category); ?>
+				<a style="text-decoration: underline;" class="label-default" href='<?= site_url("administrator/blog_category/view/{$blog->tab_category_value }"); ?>'>
+                           <?= _ent($blog->tab_category_label); ?>
+				</a>
+                        </div>
+                    </div>
+                                         
+                    <div class="form-group ">
+                        <label for="content" class="col-sm-2">Created By </label>
+
+                        <div class="col-sm-8">
+				<a style="text-decoration: underline;" class="label-default" href='<?= site_url("administrator/aauth_users/view/{$blog->tab_created_by_value }"); ?>'>
+                           <?= _ent($blog->tab_created_by_label); ?>
+				</a>
                         </div>
                     </div>
                                         

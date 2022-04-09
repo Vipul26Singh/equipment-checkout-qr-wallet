@@ -1,25 +1,22 @@
-{php_open_tag}
+<?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Model_api_{table_name} extends MY_Model {
+class Model_api_blog_category extends MY_Model {
 
-	<?php
-		$field_in_column = $this->crud_builder->getFieldShowInColumn(); 
-		$model_relations = $this->crud_builder->getFieldRelation();
-		$field_filteration_detail = $this->crud_builder->getRestFilterableField();
-		$has_relations = 0;
-		if(!empty($model_relations)) {
-			$has_relations = 1;
-		}
-?>
+	Array
+(
+    [category_id] => like
+    [category_name] => equals
+    [category_desc] => equals
+)
 
-	private $primary_key 	= '{primary_key}';
-	private $table_name 	= '{table_name}';
-	private $field_search 	= ['<?= implode("', '", $field_in_column); ?>'];
-	private $user_restriction = '{user_restriction}';
-	private $user_restriction_columns = '{user_restriction_columns}';
-	private $has_relations = <?= $has_relations ?>;
-	private $default_select_field =  ['<?= implode("', '", $show_in_column); ?>'];
+	private $primary_key 	= 'category_id';
+	private $table_name 	= 'blog_category';
+	private $field_search 	= ['category_id', 'category_name', 'category_desc'];
+	private $user_restriction = '';
+	private $user_restriction_columns = '';
+	private $has_relations = 0;
+	private $default_select_field =  ['category_id', 'category_name', 'category_desc'];
 
 
 
@@ -36,33 +33,14 @@ class Model_api_{table_name} extends MY_Model {
 
 		$this->load->model('model_api_blog');
 
-		<?php
-                if(!empty($model_relations))  {
-                        foreach($model_relations as $k => $v) {
-		?>
-		$this->load->model('model_api_<?= $v['relation_table'] ?>');
-                <?php }
-                }
-                ?>
-
+		
 		parent::__construct($config);
 	}
 
 	public function fetch_recursive_relations($map_row)
 	{
 		
-		<?php
-		if(!empty($model_relations))  {      
-			foreach($model_relations as $k => $v) { 
-?>
-		if(is_object($map_row)) {
-			$map_row-><?= $k ?>_detail = $this->model_api_<?= $v['relation_table'] ?>->get($map_row-><?= $k ?>, '<?= $v['relation_value'] ?>', 0, 0, [], true);
-		} else {
-			$map_row['<?= $k ?>_detail'] = $this->model_api_<?= $v['relation_table'] ?>->get($map_row['<?= $k ?>'], '<?= $v['relation_value'] ?>', 0, 0, [], true);
-		}
-		<?php } 
-		}
-		?> 
+		 
 		return $map_row;
 	}
 
@@ -107,7 +85,7 @@ class Model_api_{table_name} extends MY_Model {
 		return $query->num_rows();
 	}
 
-	public function get($q = null, $field = null, $limit = 0, $offset = 0, $select_field = [], $use_default_select_field = false, $filterable_data = [])
+	public function get($q = null, $field = null, $limit = 0, $offset = 0, $select_field = [], $use_default_select_field = false)
 	{
 		if($use_default_select_field) {
 			$select_field = $this->default_select_field;
@@ -182,5 +160,5 @@ class Model_api_{table_name} extends MY_Model {
 
 }
 
-/* End of file Model_{table_name}.php */
-/* Location: ./application/models/Model_{table_name}.php */
+/* End of file Model_blog_category.php */
+/* Location: ./application/models/Model_blog_category.php */

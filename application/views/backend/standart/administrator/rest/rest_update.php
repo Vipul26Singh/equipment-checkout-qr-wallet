@@ -135,8 +135,6 @@
                   </div>
 
 
-
-
                   <hr>
                   <div class="wrapper-rest">
                      <table class="table table-responsive table table-bordered table-striped"  id="diagnosis_list">
@@ -144,7 +142,9 @@
                           <tr>
                            <th width="20" rowspan="2" valign="midle" style="vertical-align: middle; text-align: center;">No</th>
                            <th width="120" rowspan="2" valign="midle" style="vertical-align: middle; text-align: center;"><?= cclang('field'); ?></th>
-                           <th width="80" colspan="4" style="text-align: center;"><?= cclang('show_in'); ?></th>
+			   <th width="80" colspan="4" style="text-align: center;"><?= cclang('show_in'); ?></th>
+			   <th width="20" rowspan="2" valign="midle" style="vertical-align: middle; text-align: center;">Filterable</th>
+			   <th width="20" rowspan="2" valign="midle" style="vertical-align: middle; text-align: center;">Filterable Type</th>
                            <th width="100" rowspan="2" valign="midle" style="vertical-align: middle; text-align: center;"><?= cclang('input_type'); ?></th>
                            <th width="200" rowspan="2" valign="midle" style="vertical-align: middle; text-align: center;"><?= cclang('validation'); ?></th>
                         </tr>
@@ -182,7 +182,26 @@
                               </td>
                               <td class="detail_page">
                                  <input class="flat-red check" type="checkbox" <?= $row->show_detail_api == 'yes' ? 'checked' : ''; ?> name="rest[<?=$i; ?>][<?=$row->field_name; ?>][show_in_detail_page]" value="yes">
-                              </td>
+			      </td>
+			     
+ 			     <td class="detail_page">
+                                <center><input class="flat-red check" type="checkbox" <?= !empty($row->field_filterable) && $row->field_filterable == 'yes' ? 'checked' : ''; ?> name="rest[<?=$i; ?>][<?=$row->field_name; ?>][field_filterable]" value="yes"></center>
+			     </td>
+
+				<td class="detail_page">
+            <center>
+                <select  class="form-control chosen chosen-select input_type" name="rest[<?=$i; ?>][<?=$row->field_name; ?>][field_filterable_type]" id="field_filterable_type" data-placeholder="Select Type" >
+                     <option value="equals" <?= $row->field_filterable_type == 'equals' ? 'selected' : ''; ?>>=</option>
+                     <option value="greaterthanequals" <?= $row->field_filterable_type == 'greaterthanequals' ? 'selected' : ''; ?> >&gt;=</option>
+                     <option value="lesthanequals" <?= $row->field_filterable_type == 'lesthanequals' ? 'selected' : ''; ?> >&lt;=</option>
+                     <option value="like" <?= $row->field_filterable_type == 'like' ? 'selected' : ''; ?> >Like</option>
+                     <option value="betweenorequals" <?= $row->field_filterable_type == 'betweenorequals' ? 'selected' : ''; ?> >Between or Equals</option>
+                     <option value="greaterthan" <?= $row->field_filterable_type == 'greaterthan' ? 'selected' : ''; ?> >&gt;</option>
+                     <option value="lessthan" <?= $row->field_filterable_type == 'lessthan' ? 'selected' : ''; ?> >&lt;</option>
+                  </select>
+                </center>
+         </td>
+
                               <td>
                                  <div class="col-md-12">
                                     <div class="form-group ">
@@ -190,11 +209,65 @@
                                           <option value="" class="<?= $this->model_rest->get_input_type(); ?>"></option>
                                           <?php foreach (db_get_all_data('rest_input_type') as $input): 
                                           ?>
-                                          <option  value="<?= $input->type; ?>" class="<?= $input->type; ?>" title="<?= $input->validation_group; ?>" relation="<?= $input->relation; ?>" <?= $input->type == $row->input_type ? 'selected="selected"' : ''; ?> ><?= ucwords(clean_snake_case($input->type)); ?></option>
+			
+					   <option  value="<?= $input->type; ?>" class="<?= $input->type; ?>" title="<?= $input->validation_group; ?>" relation="<?= $input->relation; ?>" custom-value="<?= $input->custom_value; ?>" <?= $input->type == $row->input_type ? 'selected="selected"' : ''; ?> ><?= ucwords(clean_snake_case($input->type)); ?></option>
                                           <?php endforeach; ?>
                                        </select>
                                     </div>
+				 </div>
+
+                              <?php if (!empty($row->relation_table)): ?>
+                              <div class="col-md-12" style="margin:0px !important">
+                                 <div class="form-group" >
+                                    <label><small class="text-muted"><?= cclang('table_reff'); ?></small></label>
+                                    <select  class="form-control chosen chosen-select relation_table relation_field" name="rest[<?=$i; ?>][<?=$row->field_name; ?>][relation_table]" id="relation_table" tabi-ndex="5" data-placeholder="Select Table" >
+                                       <option value=""></option>
+                                        <?php foreach ($this->db->list_tables() as $table): ?>
+                                       <option <?= $row->relation_table == $table ? 'selected' : ''; ?> value="<?= $table; ?>"><?= $table; ?></option>
+                                       <?php endforeach; ?>
+                                    </select>
                                  </div>
+                              </div>
+                              <div class="col-md-12" style="margin:0px !important">
+                                 <div class="form-group ">
+                                    <label><small class="text-muted"><?= cclang('value_field_reff'); ?></small></label>
+                                    <select  class="form-control chosen chosen-select relation_value relation_field" name="rest[<?=$i; ?>][<?=$row->field_name; ?>][relation_value]" id="relation_value" tabi-ndex="5" data-placeholder="Select ID" >
+                                       <option value=""></option>
+                                       <?php foreach ($this->db->list_fields($row->relation_table) as $field){ ?>
+                                       <option <?= $row->relation_value == $field ? 'selected' : ''; ?> value="<?= $field; ?>"><?= ucwords($field); ?></option>
+                                       <?php } ?>
+                                    </select>
+                                 </div>
+                              </div>
+                              <?php else : ?>
+                                 <div class="col-md-12" style="margin:0px !important">
+                                 <div class="form-group display-none ">
+                                    <label><small class="text-muted"><?= cclang('table_reff'); ?></small></label>
+                                    <select  class="form-control chosen chosen-select relation_table relation_field" name="rest[<?=$i; ?>][<?=$row->field_name; ?>][relation_table]" id="relation_table" tabi-ndex="5" data-placeholder="Select Table" >
+                                       <option value=""></option>
+                                        <?php foreach ($this->db->list_tables() as $table): ?>
+                                       <option value="<?= $table; ?>"><?= $table; ?></option>
+                                       <?php endforeach; ?>
+                                    </select>
+                                 </div>
+                              </div>
+                              <div class="col-md-12" style="margin:0px !important">
+                                 <div class="form-group display-none ">
+                                    <label><small class="text-muted"><?= cclang('value_field_reff'); ?></small></label>
+                                    <select  class="form-control chosen chosen-select relation_value relation_field" name="rest[<?=$i; ?>][<?=$row->field_name; ?>][relation_value]" id="relation_value" tabi-ndex="5" data-placeholder="Select ID" >
+                                       <option value=""></option>
+                                    </select>
+                                 </div>
+                              </div>
+                              <div class="col-md-12" style="margin:0px !important">
+                                 <div class="form-group display-none ">
+                                    <label><small class="text-muted"><?= cclang('label_field_reff'); ?></small></label>
+                                    <select  class="form-control chosen chosen-select relation_label relation_field" name="rest[<?=$i; ?>][<?=$row->field_name; ?>][relation_label]" id="relation_label" tabi-ndex="5" data-placeholder="Select Label" >
+                                       <option value=""></option>
+                                    </select>
+                                 </div>
+                              </div>
+                              <?php endif; ?>
                               </td>
                               <td>
                                  <div class="col-md-12">

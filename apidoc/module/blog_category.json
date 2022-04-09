@@ -1,10 +1,10 @@
 {
     "type": "post",
-    "url": "/blog/add",
-    "title": "Add Blog.",
+    "url": "/blog_category/add",
+    "title": "Add Blog category.",
     "version": "0.1.0",
-    "name": "Addblog",
-    "group": "blog",
+    "name": "Addblog_category",
+    "group": "blog_category",
     "header": {
       "fields": {
         "Header": [
@@ -13,14 +13,22 @@
             "type": "String",
             "optional": false,
             "field": "X-Api-Key",
-            "description": "<p>Blog unique access-key.</p>"
+            "description": "<p>Blog category unique access-key.</p>"
+          }
+          ,
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "X-Token",
+            "description": "<p>Blog category unique token.</p>"
           }
                   ]
       }
     },
     "permission": [
       {
-        "name": "Blog Cant be Accessed permission name : api_blog_add"
+        "name": "Blog category Cant be Accessed permission name : api_blog_category_add"
       }
     ],
     "parameter": {
@@ -30,29 +38,15 @@
             "group": "Parameter",
             "type": "String",
             "optional": true,
-            "field": "Title",
-            "description": "<p>Optional title of Blogs .</p>"
+            "field": "Category_name",
+            "description": "<p>Optional category_name of Blog categorys .</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": true,
-            "field": "Content",
-            "description": "<p>Optional content of Blogs .</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "Image",
-            "description": "<p>Optional image of Blogs .</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "Category",
-            "description": "<p>Optional category of Blogs .</p>"
+            "field": "Category_desc",
+            "description": "<p>Optional category_desc of Blog categorys .</p>"
           }
         ]
       }
@@ -103,16 +97,16 @@
         }
       ]
     },
-    "filename": "application/controllers/api/Blog.php",
-    "groupTitle": "Blog"
+    "filename": "application/controllers/api/Blog_category.php",
+    "groupTitle": "Blog category"
   }
 ,  {
     "type": "get",
-    "url": "/blog/all",
-    "title": "Get all Blogs.",
+    "url": "/blog_category/all",
+    "title": "Get all Blog categorys.",
     "version": "0.1.0",
-    "name": "Allblog",
-    "group": "blog",
+    "name": "Allblog_category",
+    "group": "blog_category",
     "header": {
       "fields": {
         "Header": [
@@ -121,21 +115,21 @@
             "type": "String",
             "optional": false,
             "field": "X-Api-Key",
-            "description": "<p>Blogs unique access-key.</p>"
+            "description": "<p>Blog categorys unique access-key.</p>"
           },
           {
             "group": "Header",
             "type": "String",
             "optional": false,
             "field": "X-Token",
-            "description": "<p>Blogs unique token.</p>"
+            "description": "<p>Blog categorys unique token.</p>"
           }
         ]
       }
     },
     "permission": [
       {
-        "name": "{} Cant be Accessed permission name : api_Blog_all"
+        "name": "{} Cant be Accessed permission name : api_Blog category_all"
       }
     ],
     "parameter": {
@@ -148,7 +142,7 @@
             "optional": true,
             "field": "Field",
             "defaultValue": "All Field",
-            "description": "<p>Optional field of Blogs.</p>"
+            "description": "<p>Optional field of Blog categorys.</p>"
           },
           {
             "group": "Parameter",
@@ -156,7 +150,7 @@
             "optional": true,
             "field": "Start",
             "defaultValue": "0",
-            "description": "<p>Optional start index of Blogs.</p>"
+            "description": "<p>Optional start index of Blog categorys.</p>"
           },
           {
             "group": "Parameter",
@@ -164,7 +158,7 @@
             "optional": true,
             "field": "Limit",
             "defaultValue": "10",
-            "description": "<p>Optional limit data of Blogs.</p>"
+            "description": "<p>Optional limit data of Blog categorys.</p>"
           }
         ]
       }
@@ -191,7 +185,7 @@
             "type": "Array",
             "optional": false,
             "field": "Data",
-            "description": "<p>data of Blog.</p>"
+            "description": "<p>data of Blog category.</p>"
           }
         ]
       },
@@ -209,8 +203,8 @@
           {
             "group": "Error 4xx",
             "optional": false,
-            "field": "NoDataBlog",
-            "description": "<p>Blog data is nothing.</p>"
+            "field": "NoDataBlog category",
+            "description": "<p>Blog category data is nothing.</p>"
           }
         ]
       },
@@ -222,16 +216,16 @@
         }
       ]
     },
-    "filename": "application/controllers/api/Blog.php",
-    "groupTitle": "Blog"
+    "filename": "application/controllers/api/Blog category.php",
+    "groupTitle": "Blog category"
   }
 ,  {
     "type": "post",
-    "url": "/Blog/delete",
-    "title": "Delete Blog.",
+    "url": "/Blog category/delete",
+    "title": "Delete Blog category.",
     "version": "0.1.0",
-    "name": "Deleteblog",
-    "group": "blog",
+    "name": "Deleteblog_category",
+    "group": "blog_category",
     "header": {
       "fields": {
         "Header": [
@@ -240,21 +234,21 @@
             "type": "String",
             "optional": false,
             "field": "X-Api-Key",
-            "description": "<p>Blogs unique access-key.</p>"
+            "description": "<p>Blog categorys unique access-key.</p>"
           },
           {
             "group": "Header",
             "type": "String",
             "optional": false,
             "field": "X-Token",
-            "description": "<p>Blogs unique token.</p>"
+            "description": "<p>Blog categorys unique token.</p>"
           }
         ]
       }
     },
     "permission": [
       {
-        "name": "Blog Cant be Accessed permission name : api_Blog_delete"
+        "name": "Blog category Cant be Accessed permission name : api_Blog category_delete"
       }
     ],
     "parameter": {
@@ -265,7 +259,7 @@
             "type": "Integer",
             "optional": false,
             "field": "Id",
-            "description": "<p>Mandatory id of Blogs .</p>"
+            "description": "<p>Mandatory id of Blog categorys .</p>"
           }
         ]
       }
@@ -316,16 +310,16 @@
         }
       ]
     },
-    "filename": "application/controllers/api/Blog.php",
-    "groupTitle": "Blog"
+    "filename": "application/controllers/api/Blog category.php",
+    "groupTitle": "Blog category"
   }
 ,  {
     "type": "get",
-    "url": "/Blog/detail",
-    "title": "Detail Blog.",
+    "url": "/Blog category/detail",
+    "title": "Detail Blog category.",
     "version": "0.1.0",
-    "name": "Detailblog",
-    "group": "blog",
+    "name": "Detailblog_category",
+    "group": "blog_category",
     "header": {
       "fields": {
         "Header": [
@@ -334,21 +328,21 @@
             "type": "String",
             "optional": false,
             "field": "X-Api-Key",
-            "description": "<p>Blogs unique access-key.</p>"
+            "description": "<p>Blog categorys unique access-key.</p>"
           },
           {
             "group": "Header",
             "type": "String",
             "optional": false,
             "field": "X-Token",
-            "description": "<p>Blogs unique token.</p>"
+            "description": "<p>Blog categorys unique token.</p>"
           }
         ]
       }
     },
     "permission": [
       {
-        "name": "Blog Cant be Accessed permission name : api_Blog_detail"
+        "name": "Blog category Cant be Accessed permission name : api_Blog category_detail"
       }
     ],
     "parameter": {
@@ -359,7 +353,7 @@
             "type": "Integer",
             "optional": false,
             "field": "Id",
-            "description": "<p>Mandatory id of Blogs.</p>"
+            "description": "<p>Mandatory id of Blog categorys.</p>"
           }
         ]
       }
@@ -386,7 +380,7 @@
             "type": "Array",
             "optional": false,
             "field": "Data",
-            "description": "<p>data of Blog.</p>"
+            "description": "<p>data of Blog category.</p>"
           }
         ]
       },
@@ -404,8 +398,8 @@
           {
             "group": "Error 4xx",
             "optional": false,
-            "field": "BlogNotFound",
-            "description": "<p>Blog data is not found.</p>"
+            "field": "Blog categoryNotFound",
+            "description": "<p>Blog category data is not found.</p>"
           }
         ]
       },
@@ -417,16 +411,16 @@
         }
       ]
     },
-    "filename": "application/controllers/api/Blog.php",
-    "groupTitle": "Blog"
+    "filename": "application/controllers/api/Blog category.php",
+    "groupTitle": "Blog category"
   }
 ,  {
     "type": "post",
-    "url": "/Blog/update",
-    "title": "Update Blog.",
+    "url": "/Blog category/update",
+    "title": "Update Blog category.",
     "version": "0.1.0",
-    "name": "Updateblog",
-    "group": "blog",
+    "name": "Updateblog_category",
+    "group": "blog_category",
     "header": {
       "fields": {
         "Header": [
@@ -435,21 +429,21 @@
             "type": "String",
             "optional": false,
             "field": "X-Api-Key",
-            "description": "<p>Blogs unique access-key.</p>"
+            "description": "<p>Blog categorys unique access-key.</p>"
           },
           {
             "group": "Header",
             "type": "String",
             "optional": false,
             "field": "X-Token",
-            "description": "<p>Blogs unique token.</p>"
+            "description": "<p>Blog categorys unique token.</p>"
           }
         ]
       }
     },
     "permission": [
       {
-        "name": "Blog Cant be Accessed permission name : api_Blog_update"
+        "name": "Blog category Cant be Accessed permission name : api_Blog category_update"
       }
     ],
     "parameter": {
@@ -459,29 +453,15 @@
             "group": "Parameter",
             "type": "String",
             "optional": true,
-            "field": "Title",
-            "description": "<p>Optional title of Blogs .</p>"
+            "field": "Category_name",
+            "description": "<p>Optional category_name of Blog categorys .</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": true,
-            "field": "Content",
-            "description": "<p>Optional content of Blogs .</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "Image",
-            "description": "<p>Optional image of Blogs .</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "Category",
-            "description": "<p>Optional category of Blogs .</p>"
+            "field": "Category_desc",
+            "description": "<p>Optional category_desc of Blog categorys .</p>"
           }
         ]
       }
@@ -532,6 +512,6 @@
         }
       ]
     },
-    "filename": "application/controllers/api/Blog.php",
-    "groupTitle": "Blog"
+    "filename": "application/controllers/api/Blog category.php",
+    "groupTitle": "Blog category"
   }

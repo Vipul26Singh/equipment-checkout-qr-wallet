@@ -19,11 +19,10 @@ class Blog extends API
 	 * @apiName AllBlog 
 	 * @apiGroup blog
 	 * @apiHeader {String} X-Api-Key Blogs unique access-key.
-	 * @apiHeader {String} X-Token Blogs unique token.
 	 * @apiPermission Blog Cant be Accessed permission name : api_blog_all
 	 *
 	 * @apiParam {String} [Filter=null] Optional filter of Blogs.
-	 * @apiParam {String} [Field="All Field"] Optional field of Blogs : id, title, content, image, category, created_by, updated_by, updated_at, created_at.
+	 * @apiParam {String} [Field="All Field"] Optional field of Blogs : id, title, content, image, category.
 	 * @apiParam {String} [Start=0] Optional start index of Blogs.
 	 * @apiParam {String} [Limit=10] Optional limit data of Blogs.
 	 *
@@ -43,14 +42,14 @@ class Blog extends API
 	 */
 	public function all_get()
 	{
-		$this->is_allowed('api_blog_all');
+		$this->is_allowed('api_blog_all', false);
 
 		$filter = $this->get('filter');
 		$field = $this->get('field');
 		$limit = $this->get('limit') ? $this->get('limit') : $this->limit_page;
 		$start = $this->get('start');
 
-		$select_field = ['id', 'title', 'content', 'image', 'category', 'created_by', 'updated_by', 'updated_at', 'created_at'];
+		$select_field = ['id', 'title', 'content', 'image', 'category'];
 		$blogs = $this->model_api_blog->get($filter, $field, $limit, $start, $select_field);
 		$total = $this->model_api_blog->count_all($filter, $field);
 
@@ -71,7 +70,6 @@ class Blog extends API
 	 * @apiName DetailBlog
 	 * @apiGroup blog
 	 * @apiHeader {String} X-Api-Key Blogs unique access-key.
-	 * @apiHeader {String} X-Token Blogs unique token.
 	 * @apiPermission Blog Cant be Accessed permission name : api_blog_detail
 	 *
 	 * @apiParam {Integer} Id Mandatory id of Blogs.
@@ -91,13 +89,13 @@ class Blog extends API
 	 */
 	public function detail_get()
 	{
-		$this->is_allowed('api_blog_detail');
+		$this->is_allowed('api_blog_detail', false);
 
 		$this->requiredInput(['id']);
 
 		$id = $this->get('id');
 
-		$select_field = ['id', 'title', 'content', 'image', 'category', 'created_by', 'updated_by', 'updated_at', 'created_at'];
+		$select_field = ['id', 'title', 'content', 'image', 'category'];
 		$data['blog'] = $this->model_api_blog->find($id, $select_field);
 
 		if ($data['blog']) {
@@ -122,17 +120,12 @@ class Blog extends API
 	 * @apiName AddBlog
 	 * @apiGroup blog
 	 * @apiHeader {String} X-Api-Key Blogs unique access-key.
-	 * @apiHeader {String} X-Token Blogs unique token.
 	 * @apiPermission Blog Cant be Accessed permission name : api_blog_add
 	 *
- 	 * @apiParam {String} Title Mandatory title of Blogs. Input Title Max Length : 200. 
-	 * @apiParam {String} Content Mandatory content of Blogs.  
-	 * @apiParam {String} Image Mandatory image of Blogs.  
-	 * @apiParam {String} Category Mandatory category of Blogs. Input Category Max Length : 200. 
-	 * @apiParam {String} Created_by Mandatory created_by of Blogs. Input Created By Max Length : 11. 
-	 * @apiParam {String} Updated_by Mandatory updated_by of Blogs. Input Updated By Max Length : 11. 
-	 * @apiParam {String} Updated_at Mandatory updated_at of Blogs.  
-	 * @apiParam {String} Created_at Mandatory created_at of Blogs.  
+ 	 * @apiParam {String} [Title] Optional title of Blogs.  
+	 * @apiParam {String} [Content] Optional content of Blogs.  
+	 * @apiParam {String} [Image] Optional image of Blogs.  
+	 * @apiParam {String} [Category] Optional category of Blogs.  
 	 *
 	 * @apiSuccess {Boolean} Status status response api.
 	 * @apiSuccess {String} Message message response api.
@@ -148,16 +141,8 @@ class Blog extends API
 	 */
 	public function add_post()
 	{
-		$this->is_allowed('api_blog_add');
+		$this->is_allowed('api_blog_add', false);
 
-		$this->form_validation->set_rules('title', 'Title', 'trim|required|max_length[200]');
-		$this->form_validation->set_rules('content', 'Content', 'trim|required');
-		$this->form_validation->set_rules('image', 'Image', 'trim|required');
-		$this->form_validation->set_rules('category', 'Category', 'trim|required|max_length[200]');
-		$this->form_validation->set_rules('created_by', 'Created By', 'trim|required|max_length[11]');
-		$this->form_validation->set_rules('updated_by', 'Updated By', 'trim|required|max_length[11]');
-		$this->form_validation->set_rules('updated_at', 'Updated At', 'trim|required');
-		$this->form_validation->set_rules('created_at', 'Created At', 'trim|required');
 		
 		if ($this->form_validation->run()) {
 
@@ -166,10 +151,6 @@ class Blog extends API
 				'content' => $this->input->post('content'),
 				'image' => $this->input->post('image'),
 				'category' => $this->input->post('category'),
-				'created_by' => $this->input->post('created_by'),
-				'updated_by' => $this->input->post('updated_by'),
-				'updated_at' => $this->input->post('updated_at'),
-				'created_at' => $this->input->post('created_at'),
 			];
 			
 			$save_blog = $this->model_api_blog->store($save_data);
@@ -203,17 +184,12 @@ class Blog extends API
 	 * @apiName UpdateBlog
 	 * @apiGroup blog
 	 * @apiHeader {String} X-Api-Key Blogs unique access-key.
-	 * @apiHeader {String} X-Token Blogs unique token.
 	 * @apiPermission Blog Cant be Accessed permission name : api_blog_update
 	 *
-	 * @apiParam {String} Title Mandatory title of Blogs. Input Title Max Length : 200. 
-	 * @apiParam {String} Content Mandatory content of Blogs.  
-	 * @apiParam {String} Image Mandatory image of Blogs.  
-	 * @apiParam {String} Category Mandatory category of Blogs. Input Category Max Length : 200. 
-	 * @apiParam {String} Created_by Mandatory created_by of Blogs. Input Created By Max Length : 11. 
-	 * @apiParam {String} Updated_by Mandatory updated_by of Blogs. Input Updated By Max Length : 11. 
-	 * @apiParam {String} Updated_at Mandatory updated_at of Blogs.  
-	 * @apiParam {String} Created_at Mandatory created_at of Blogs.  
+	 * @apiParam {String} [Title] Optional title of Blogs.  
+	 * @apiParam {String} [Content] Optional content of Blogs.  
+	 * @apiParam {String} [Image] Optional image of Blogs.  
+	 * @apiParam {String} [Category] Optional category of Blogs.  
 	 * @apiParam {Integer} id Mandatory id of Blog.
 	 *
 	 * @apiSuccess {Boolean} Status status response api.
@@ -230,17 +206,9 @@ class Blog extends API
 	 */
 	public function update_post()
 	{
-		$this->is_allowed('api_blog_update');
+		$this->is_allowed('api_blog_update', false);
 
 		
-		$this->form_validation->set_rules('title', 'Title', 'trim|required|max_length[200]');
-		$this->form_validation->set_rules('content', 'Content', 'trim|required');
-		$this->form_validation->set_rules('image', 'Image', 'trim|required');
-		$this->form_validation->set_rules('category', 'Category', 'trim|required|max_length[200]');
-		$this->form_validation->set_rules('created_by', 'Created By', 'trim|required|max_length[11]');
-		$this->form_validation->set_rules('updated_by', 'Updated By', 'trim|required|max_length[11]');
-		$this->form_validation->set_rules('updated_at', 'Updated At', 'trim|required');
-		$this->form_validation->set_rules('created_at', 'Created At', 'trim|required');
 		
 		if ($this->form_validation->run()) {
 
@@ -249,10 +217,6 @@ class Blog extends API
 				'content' => $this->input->post('content'),
 				'image' => $this->input->post('image'),
 				'category' => $this->input->post('category'),
-				'created_by' => $this->input->post('created_by'),
-				'updated_by' => $this->input->post('updated_by'),
-				'updated_at' => $this->input->post('updated_at'),
-				'created_at' => $this->input->post('created_at'),
 			];
 			
 			$save_blog = $this->model_api_blog->change($this->post('id'), $save_data);
@@ -286,7 +250,6 @@ class Blog extends API
 	 * @apiName DeleteBlog
 	 * @apiGroup blog
 	 * @apiHeader {String} X-Api-Key Blogs unique access-key.
-	 * @apiHeader {String} X-Token Blogs unique token.
 	 	 * @apiPermission Blog Cant be Accessed permission name : api_blog_delete
 	 *
 	 * @apiParam {Integer} Id Mandatory id of Blogs .
@@ -305,7 +268,7 @@ class Blog extends API
 	 */
 	public function delete_post()
 	{
-		$this->is_allowed('api_blog_delete');
+		$this->is_allowed('api_blog_delete', false);
 
 		$blog = $this->model_api_blog->find($this->post('id'));
 

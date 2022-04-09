@@ -1,0 +1,9 @@
+Array
+(
+    [category] => Array
+        (
+            [relation_table] => blog_category
+            [relation_value] => category_id
+        )
+
+)

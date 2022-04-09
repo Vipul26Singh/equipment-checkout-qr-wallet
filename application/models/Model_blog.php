@@ -5,10 +5,10 @@ class Model_blog extends MY_Model {
 
 		private $primary_key 	= 'id';
 		private $table_name 	= 'blog';
-	private $field_search 	= ['title', 'content', 'image', 'category'];
+	private $field_search 	= ['title', 'content', 'image', 'category', 'created_by'];
 	private $user_restriction = '1';
 	private $user_restriction_columns = 'created_by,updated_by';
-	private $field_search_type = array("title" => "input","content" => "editor_wysiwyg","image" => "file","category" => "input");
+	private $field_search_type = array("title" => "input","content" => "editor_wysiwyg","image" => "file","category" => "select","created_by" => "select");
 	private $export_select_string = '';
 
 	public function __construct()
@@ -29,6 +29,10 @@ class Model_blog extends MY_Model {
 
 		public function select_string() {
 			$select_string = '';
+			
+			$select_string .= "tab_category.category_id as tab_category_value, tab_category.category_name as tab_category_label,"	;
+			
+			$select_string .= "tab_created_by.id as tab_created_by_value, tab_created_by.email as tab_created_by_label,"	;
 						$select_string .= "blog.*";
 			$this->db->select($select_string, FALSE);
 			return $this;
@@ -39,8 +43,9 @@ class Model_blog extends MY_Model {
                         			$select_string .= "title as `title`,";
 						$select_string .= "content as `content`,";
 						$select_string .= "image as `image`,";
-						$select_string .= "category as `category`,";
-						$select_string = rtrim($select_string, ",");
+			                        $select_string .= " (select relt1.category_name from blog_category relt1 where relt1.category_id = blog.category ) as `category`,";
+                                                $select_string .= " (select relt2.email from aauth_users relt2 where relt2.id = blog.created_by ) as `created_by`,";
+                        			$select_string = rtrim($select_string, ",");
 			
                         return $select_string;	
 		}
@@ -136,6 +141,8 @@ class Model_blog extends MY_Model {
 	}
 
 	public function join_avaiable() {
+					$this->db->join('blog_category tab_category', 'tab_category.category_id = blog.category', 'LEFT');
+					$this->db->join('aauth_users tab_created_by', 'tab_created_by.id = blog.created_by', 'LEFT');
 		
 			return $this;
 	}

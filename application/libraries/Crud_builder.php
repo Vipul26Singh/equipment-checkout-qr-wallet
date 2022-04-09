@@ -135,9 +135,9 @@ class Crud_builder
 			if (in_array($input_type, $list_relation_type)) {
 				if (empty($contains[$field_name]['relation_table']) 
 					OR empty($contains[$field_name]['relation_value']) 
-					OR empty($contains[$field_name]['relation_label']) )
+					 )
 				{
-					$this->errors[] = 'The '.ucwords(clean_snake_case($field_name)).' relation table, value and label must be filled.';
+					$this->errors[] = 'The '.ucwords(clean_snake_case($field_name)).' relation table, value and label must be filled.' ;
 				}
 			}
 
@@ -248,6 +248,19 @@ class Crud_builder
                                 } else {
                                         $fields[] = $field;
                                 }
+                        }
+                }
+                return $fields;
+	}
+
+	public function getRestFilterableField()
+        {
+                $fields = [];
+                foreach ($this->crud as $contains)
+                {
+                        $field = array_keys($contains)[0];
+                        if (isset($contains[$field]['field_filterable']) AND $contains[$field]['field_filterable']) {
+                                        $fields[$field] = $contains[$field]['field_filterable_type'];
                         }
                 }
                 return $fields;
@@ -369,6 +382,7 @@ class Crud_builder
 	 */
 	public function getFieldRelation($field_name = null)
 	{
+
 		$fields = [];
 		foreach ($this->crud as $contains)
 		{
@@ -381,6 +395,11 @@ class Crud_builder
 							'relation_value' => $contains[$field]['relation_value'],
 							'relation_label' => $contains[$field]['relation_label'],
 						];
+					} else {
+						$fields[$field] = [
+                                                        'relation_table' => $contains[$field]['relation_table'],
+                                                        'relation_value' => $contains[$field]['relation_value'],
+                                                ];
 					}
 				}
 			}
