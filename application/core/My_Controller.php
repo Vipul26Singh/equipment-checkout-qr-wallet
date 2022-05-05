@@ -970,6 +970,20 @@ class API extends REST_Controller
 	    unset($user_object->last_activity);
 	    unset($user_object->date_created);
 
+	    $user_object->groups = $this->aauth->get_user_groups($user_object->id);
+
+	    foreach($user_object->groups as $user_ob) {
+		unset($user_ob->user_id);
+		unset($user_ob->created_by);
+		unset($user_ob->created_at);
+		unset($user_ob->updated_at);
+		unset($user_ob->updated_by);
+		unset($user_ob->priority);
+		unset($user_ob->id);
+		unset($user_ob->definition);
+	    }
+
+
 	    $user_object->avatar = BASE_URL.'uploads/user/'.$user_object->avatar;
 	    return $user_object;
     }
