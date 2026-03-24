@@ -4,7 +4,7 @@
 
 [![PHP](https://img.shields.io/badge/PHP-%3E%3D5.4-blue)](https://php.net)
 [![CodeIgniter](https://img.shields.io/badge/CodeIgniter-3-orange)](https://codeigniter.com)
-[![Version](https://img.shields.io/badge/version-2.6.8-brightgreen)](https://github.com/vipul26singh/qpay)
+[![Version](https://img.shields.io/badge/version-2.6.8-brightgreen)](https://github.com/vipul26singh/equipment-checkout-qr-wallet)
 
 ---
 
@@ -82,8 +82,8 @@
 
 ```bash
 # 1. Clone
-git clone https://github.com/vipul26singh/qpay.git
-cd qpay
+git clone https://github.com/vipul26singh/equipment-checkout-qr-wallet.git
+cd equipment-checkout-qr-wallet
 
 # 2. Install dependencies
 composer install
@@ -98,7 +98,7 @@ mysql -u root -p your_db_name < qpay.sql
 # Edit application/config/config.php → $config['base_url']
 
 # 6. Run setup wizard
-# Open: http://localhost/qpay/wizzard
+# Open: http://localhost/equipment-checkout-qr-wallet/wizzard
 ```
 
 ---
