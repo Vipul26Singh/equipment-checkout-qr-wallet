@@ -1,158 +1,141 @@
-# CLAUDE.md — Project Guide for AI Assistants
+# CLAUDE.md — Developer Guide
 
-This file provides context and instructions for working with this codebase using Claude or other AI coding assistants.
+QPay is a **CodeIgniter 3 PHP web application** for equipment checkout/check-in management, event tracking, and QR-code-based user wallets. It was scaffolded using [api_generator](https://github.com/vipul26singh/api_generator).
 
-## Project Overview
+## What This App Does
 
-**QPay** is a CodeIgniter 3 PHP web application platform. It auto-generates CRUD interfaces, REST APIs, and admin dashboards from a MySQL database schema. It also includes a user wallet/payment system, blog CMS, equipment tracking, form builder, and a visual page builder.
-
-- **Framework:** CodeIgniter 3
-- **Language:** PHP >= 5.4
-- **Database:** MySQL/MariaDB
-- **Version:** 2.6.8
+- Tracks physical equipment (inventory, checkout to events, check-in returns)
+- Issues QR-code digital wallets to users
+- Manages events and links equipment to them
+- Provides a REST API (JWT-secured) for mobile/frontend clients
+- Admin dashboard with user/role/content management
 
 ---
 
-## Repository Structure
+## Project Structure
 
 ```
 application/
   controllers/
-    api/           - REST API controllers (JWT-secured)
-    administrator/ - Admin panel controllers
-  models/          - Database models (30+ classes)
+    api/             - REST API (JWT auth), one file per resource
+    administrator/   - Admin panel, one file per section
+  models/            - DB models; naming: <table>_model.php
   views/
-    frontend/      - Public-facing templates
-    backend/       - Admin dashboard views
-  libraries/       - Auth (Aauth), JWT, SMS, PDF, QR code
-  config/          - All configuration files
-  migrations/      - Database migration files
-asset/             - Frontend assets (AdminLTE, jQuery, Bootstrap)
-form_builder/      - Visual form builder module
-cc-content/        - Page builder themes and elements
-vendor/            - Composer dependencies
-qpay.sql           - Full database schema
+    frontend/        - Public-facing templates
+    backend/         - Admin dashboard (AdminLTE)
+  libraries/         - Aauth (auth), JWT, Infobip (SMS), QR, PDF
+  config/            - All config files (see below)
+  migrations/        - DB migrations
+asset/               - CSS/JS (AdminLTE, Bootstrap, jQuery, DataTables)
+form_builder/        - Visual drag-and-drop form builder module
+cc-content/          - Page builder themes and elements
+vendor/              - Composer packages
+qpay.sql             - Full DB schema
 ```
 
 ---
 
-## Key Configuration Files
+## Key Config Files
 
-| File | Purpose |
+| File | What to change |
 |---|---|
-| `application/config/config.php` | Base URL, encryption key, session settings |
-| `application/config/database.php` | MySQL connection (host, user, db name) |
-| `application/config/rest.php` | REST API format, auth, rate limits |
-| `application/config/aauth.php` | User auth settings, password rules, groups |
-| `application/config/routes.php` | URL routing rules |
-| `application/config/autoload.php` | Auto-loaded libraries, helpers, models |
+| `application/config/config.php` | Base URL, encryption key |
+| `application/config/database.php` | MySQL host/user/db |
+| `application/config/rest.php` | API format, rate limits, auth |
+| `application/config/aauth.php` | Auth rules, password policy, groups |
+| `application/config/routes.php` | URL routing |
+| `application/config/autoload.php` | Auto-loaded libs/helpers/models |
 
 ---
 
-## Architecture Patterns
+## Architecture
 
 ### Controllers
-- All admin controllers extend `CI_Controller` and live in `application/controllers/administrator/`
-- API controllers extend `REST_Controller` (custom library) and live in `application/controllers/api/`
-- Use `$this->aauth->is_loggedin()` / `$this->aauth->is_admin()` for access control
+- Admin controllers → `application/controllers/administrator/`, extend `CI_Controller`
+- API controllers → `application/controllers/api/`, extend `REST_Controller`
+- Access control: `$this->aauth->is_loggedin()` / `$this->aauth->is_admin()`
 
 ### Models
-- Follow CodeIgniter's Active Record pattern
-- Models are in `application/models/` with `_model.php` suffix convention
-- Database queries use `$this->db->get()`, `$this->db->insert()`, etc.
+- CodeIgniter Active Record pattern
+- `$this->db->get()`, `$this->db->insert()`, `$this->db->update()`
 
-### Authentication
-- **Aauth library** handles user auth, groups, and permissions
-- **JWT** (`firebase/php-jwt`) is used for API token auth
-- Google OAuth via `google/apiclient`
-- Mobile OTP via Infobip SMS gateway
+### Auth
+- **Aauth** — user accounts, groups, permissions
+- **JWT** (`firebase/php-jwt`) — API token auth
+- **Google OAuth** — via `google/apiclient`
+- **OTP** — Infobip SMS gateway
 
 ### REST API
-- All API responses are JSON
-- JWT token required in `Authorization: Bearer <token>` header
-- Token issued at `/api/user/login`
-- Rate limiting and key-based access configured in `rest.php`
+- JSON responses
+- `Authorization: Bearer <token>` header required
+- Token issued at `POST /api/user/login`
 
 ---
 
-## Common Development Tasks
+## Core Business Logic
 
-### Adding a New API Endpoint
+### Equipment Checkout Flow
+1. Equipment created in `equipments` table with category, barcode, size
+2. Admin creates an event in `events`
+3. Equipment assigned to event via `event_equipment_checkout`
+4. Checkout logged in `equipment_checkout` (timestamp, user, condition)
+5. Return logged in `equipment_checkin`
 
-1. Create a controller in `application/controllers/api/YourName.php`
-2. Extend `REST_Controller`
-3. Name methods with HTTP verb suffix: `index_get()`, `index_post()`
-4. Use `$this->response(['data' => ...], REST_Controller::HTTP_OK)`
+### Wallet / QR Flow
+1. User account created → wallet record in `user_wallet`
+2. QR code generated via `chillerlan/php-qrcode`
+3. Wallet code retrievable via `/api/user_wallet`
+
+---
+
+## Common Tasks
+
+### Add a new REST API endpoint
 
 ```php
-class YourName extends REST_Controller {
+// application/controllers/api/YourResource.php
+class YourResource extends REST_Controller {
     public function index_get() {
         $data = $this->your_model->get_all();
         $this->response(['status' => true, 'data' => $data], REST_Controller::HTTP_OK);
     }
+    public function index_post() {
+        // handle POST
+    }
 }
 ```
 
-### Adding a New Admin Page
+### Add a new admin page
 
-1. Create controller in `application/controllers/administrator/`
-2. Load the view: `$this->load->view('backend/your_view', $data)`
-3. Add menu item in the sidebar view template
+1. Create `application/controllers/administrator/YourPage.php`
+2. Load view: `$this->load->view('backend/your_view', $data)`
+3. Add link in sidebar template
 
-### Database Migrations
+### Run database migration
 
-Migration files live in `application/migrations/`. Run via CodeIgniter's migration library or the admin wizard.
+Use CodeIgniter's migration library or run SQL directly against the `qpay` database.
 
 ---
 
 ## Dependencies
 
-Install with Composer:
 ```bash
 composer install
 ```
 
 Key packages:
-- `firebase/php-jwt` — JWT token generation/validation
+- `firebase/php-jwt` — JWT tokens
 - `google/apiclient` — Google OAuth
-- `guzzlehttp/guzzle` — HTTP requests
+- `guzzlehttp/guzzle` — HTTP client
 - `chillerlan/php-qrcode` — QR code generation
 - `infobip/infobip-api-php-client` — SMS OTP
 - `dompdf/dompdf` — PDF export
 
 ---
 
-## Database
+## Environment
 
-Import the full schema:
-```bash
-mysql -u root -p qpay < qpay.sql
-```
-
-Key tables:
-- `aauth_users` — user accounts
-- `aauth_groups` — roles (admin, superadmin, customer, public)
-- `aauth_group_to_group` — group hierarchy
-- `user_wallet` — wallet balances
-- `blog`, `blog_category` — CMS content
-- `equipment` — equipment inventory
-- `events` — event scheduling
-- `form_*` — form builder definitions
-
----
-
-## Environment Notes
-
-- Set `ENVIRONMENT` to `development` or `production` in `index.php`
-- Error reporting and debug bar activate in `development` mode
-- Base URL must be set in `application/config/config.php`
-- `.htaccess` must be enabled (Apache `mod_rewrite` required)
-
----
-
-## Testing & Debugging
-
-- Debug bar: enabled in development via `maximebf/debugbar`
-- Error pages: `filp/whoops` in development mode
-- API testing: use Postman or curl with JWT Bearer token
-- Logs: `application/logs/` (set `$config['log_threshold']` in config.php)
+- Set `ENVIRONMENT` in `index.php` (`development` / `production`)
+- Development mode enables debug bar and whoops error pages
+- Logs: `application/logs/` — set level via `$config['log_threshold']`
+- Requires Apache `mod_rewrite` (`.htaccess` included)
